@@ -11,7 +11,12 @@
       />
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
       <!-- 欢迎语 -->
-      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"> {{t('layout.header.welcomeIn')}} {{ title }} </span>
+      <span
+        v-if="getShowContent && getShowBreadTitle && !getIsMobile"
+        :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`, 'headerIntroductionClass']"
+      >
+        {{ t("layout.header.welcomeIn") }} {{ title }}
+      </span>
     </div>
     <!-- left end -->
 
@@ -45,40 +50,40 @@
   <LoginSelect ref="loginSelectRef" @success="loginSelectOk"></LoginSelect>
 </template>
 <script lang="ts">
-  import { defineComponent, unref, computed, ref, onMounted, toRaw } from 'vue';
-  import { useGlobSetting } from '/@/hooks/setting';
-  import { propTypes } from '/@/utils/propTypes';
+  import { defineComponent, unref, computed, ref, onMounted, toRaw } from "vue";
+  import { useGlobSetting } from "/@/hooks/setting";
+  import { propTypes } from "/@/utils/propTypes";
 
-  import { Layout } from 'ant-design-vue';
-  import { AppLogo } from '/@/components/Application';
-  import LayoutMenu from '../menu/index.vue';
-  import LayoutTrigger from '../trigger/index.vue';
+  import { Layout } from "ant-design-vue";
+  import { AppLogo } from "/@/components/Application";
+  import LayoutMenu from "../menu/index.vue";
+  import LayoutTrigger from "../trigger/index.vue";
 
-  import { AppSearch } from '/@/components/Application';
+  import { AppSearch } from "/@/components/Application";
 
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
+  import { useHeaderSetting } from "/@/hooks/setting/useHeaderSetting";
+  import { useMenuSetting } from "/@/hooks/setting/useMenuSetting";
+  import { useRootSetting } from "/@/hooks/setting/useRootSetting";
 
-  import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
-  import { SettingButtonPositionEnum } from '/@/enums/appEnum';
-  import { AppLocalePicker } from '/@/components/Application';
+  import { MenuModeEnum, MenuSplitTyeEnum } from "/@/enums/menuEnum";
+  import { SettingButtonPositionEnum } from "/@/enums/appEnum";
+  import { AppLocalePicker } from "/@/components/Application";
 
-  import { UserDropDown, LayoutBreadcrumb, FullScreen, Notify, ErrorAction, LockScreen } from './components';
-  import { useAppInject } from '/@/hooks/web/useAppInject';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { UserDropDown, LayoutBreadcrumb, FullScreen, Notify, ErrorAction, LockScreen } from "./components";
+  import { useAppInject } from "/@/hooks/web/useAppInject";
+  import { useDesign } from "/@/hooks/web/useDesign";
 
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-  import { useLocale } from '/@/locales/useLocale';
+  import { createAsyncComponent } from "/@/utils/factory/createAsyncComponent";
+  import { useLocale } from "/@/locales/useLocale";
 
-  import LoginSelect from '/@/views/sys/login/LoginSelect.vue';
-  import { useUserStore } from '/@/store/modules/user';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import Aide from "@/views/dashboard/ai/components/aide/index.vue"
+  import LoginSelect from "/@/views/sys/login/LoginSelect.vue";
+  import { useUserStore } from "/@/store/modules/user";
+  import { useI18n } from "/@/hooks/web/useI18n";
+  import Aide from "@/views/dashboard/ai/components/aide/index.vue";
   const { t } = useI18n();
 
   export default defineComponent({
-    name: 'LayoutHeader',
+    name: "LayoutHeader",
     components: {
       Header: Layout.Header,
       AppLogo,
@@ -93,16 +98,16 @@
       ErrorAction,
       LockScreen,
       LoginSelect,
-      SettingDrawer: createAsyncComponent(() => import('/@/layouts/default/setting/index.vue'), {
+      SettingDrawer: createAsyncComponent(() => import("/@/layouts/default/setting/index.vue"), {
         loading: true,
       }),
-      Aide
+      Aide,
     },
     props: {
       fixed: propTypes.bool,
     },
     setup(props) {
-      const { prefixCls } = useDesign('layout-header');
+      const { prefixCls } = useDesign("layout-header");
       const userStore = useUserStore();
       const { getShowTopMenu, getShowHeaderTrigger, getSplit, getIsMixMode, getMenuWidth, getIsMixSidebar } = useMenuSetting();
       const { getUseErrorHandle, getShowSettingButton, getSettingButtonPosition } = useRootSetting();
@@ -181,7 +186,7 @@
       }
 
       function loginSelectOk() {
-        console.log('成功。。。。。');
+        console.log("成功。。。。。");
       }
 
       onMounted(() => {
@@ -215,30 +220,30 @@
         loginSelectOk,
         loginSelectRef,
         title,
-        t
+        t,
       };
     },
   });
 </script>
 <style lang="less">
-  @import './index.less';
+  @import "./index.less";
   //update-begin---author:scott ---date:2022-09-30  for：默认隐藏顶部菜单面包屑-----------
   //顶部欢迎语展示样式
-  @prefix-cls: ~'@{namespace}-layout-header';
-  
+  @prefix-cls: ~"@{namespace}-layout-header";
+
   .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
     height: 48px;
     align-items: center;
-    
+
     .headerIntroductionClass {
       margin-right: 4px;
       margin-bottom: 2px;
       border-bottom: 0px;
       border-left: 0px;
     }
-    
+
     &--light {
       .headerIntroductionClass {
         color: @breadcrumb-item-normal-color;
@@ -249,7 +254,8 @@
       .headerIntroductionClass {
         color: rgba(255, 255, 255, 0.6);
       }
-      .anticon, .truncate {
+      .anticon,
+      .truncate {
         color: rgba(255, 255, 255, 0.8);
       }
     }

@@ -1,4 +1,4 @@
-import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum';
+import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from "/@/enums/menuEnum";
 import {
   ContentEnum,
   PermissionModeEnum,
@@ -6,11 +6,11 @@ import {
   RouterTransitionEnum,
   SettingButtonPositionEnum,
   SessionTimeoutProcessingEnum,
-} from '/@/enums/appEnum';
+} from "/@/enums/appEnum";
 
-import { CacheTypeEnum } from '/@/enums/cacheEnum';
+import { CacheTypeEnum } from "/@/enums/cacheEnum";
 
-export type LocaleType = 'zh_CN' | 'en' | 'ru' | 'ja' | 'ko';
+export type LocaleType = "zh_CN" | "en" | "ru" | "ja" | "ko";
 
 export interface MenuSetting {
   bgColor: string;
@@ -24,7 +24,7 @@ export interface MenuSetting {
   mode: MenuModeEnum;
   type: MenuTypeEnum;
   theme: ThemeEnum;
-  topMenuAlign: 'start' | 'center' | 'end';
+  topMenuAlign: "start" | "center" | "end";
   trigger: TriggerEnum;
   accordion: boolean;
   closeMixSidebarOnChange: boolean;
@@ -70,43 +70,44 @@ export interface LocaleSetting {
 }
 
 export interface TransitionSetting {
-  //  Whether to open the page switching animation
+  //  Whether to open the page switching animation  是否打开页面切换动画
   enable: boolean;
-  // Route basic switching animation
+  // Route basic switching animation    路由基本切换动画
   basicTransition: RouterTransitionEnum;
-  // Whether to open page switching loading
+  // Whether to open page switching loading 是否打开页面切换加载
   openPageLoading: boolean;
-  // Whether to open the top progress bar
+  // Whether to open the top progress bar 是否打开顶部进度条
   openNProgress: boolean;
 }
 
+// 系统配置
 export interface ProjectConfig {
-  // Storage location of permission related information
+  // Storage location of permission related information 权限相关信息的存储位置
   permissionCacheType: CacheTypeEnum;
-  // Whether to show the configuration button
+  // Whether to show the configuration button 是否显示配置按钮
   showSettingButton: boolean;
-  // Whether to show the theme switch button
+  // Whether to show the theme switch button 是否显示主题切换按钮
   showDarkModeToggle: boolean;
-  // Configure where the button is displayed
+  // Configure where the button is displayed    配置按钮的显示位置
   settingButtonPosition: SettingButtonPositionEnum;
-  // Permission mode
+  // Permission mode    权限模式
   permissionMode: PermissionModeEnum;
-  // Session timeout processing
+  // Session timeout processing     会话超时处理
   sessionTimeoutProcessing: SessionTimeoutProcessingEnum;
-  // Website gray mode, open for possible mourning dates
+  // Website gray mode, open for possible mourning dates    网站灰色模式，开放可能的哀悼日期
   grayMode: boolean;
-  // Whether to turn on the color weak mode
+  // Whether to turn on the color weak mode 是否开启颜色弱模式
   colorWeak: boolean;
   // Theme color
   themeColor: string;
 
-  // The main interface is displayed in full screen, the menu is not displayed, and the top
+  // The main interface is displayed in full screen, the menu is not displayed, and the top 全屏显示主界面，不显示菜单，顶部显示
   fullContent: boolean;
-  // content width
+  // content width  内容宽度
   contentMode: ContentEnum;
-  // Whether to display the logo
+  // Whether to display the logo    是否显示logo
   showLogo: boolean;
-  // Whether to show the global footer
+  // Whether to show the global footer 是否显示全局页脚
   showFooter: boolean;
   // menuType: MenuTypeEnum;
   headerSetting: HeaderSetting;
@@ -114,15 +115,15 @@ export interface ProjectConfig {
   menuSetting: MenuSetting;
   // Multi-tab settings
   multiTabsSetting: MultiTabsSetting;
-  // Animation configuration
+  // Animation configuration    动画配置
   transitionSetting: TransitionSetting;
   // pageLayout whether to enable keep-alive
   openKeepAlive: boolean;
-  // Lock screen time
+  // Lock screen time   锁定屏幕时间
   lockTime: number;
-  // Show breadcrumbs
+  // Show breadcrumbs   显示面包屑
   showBreadCrumb: boolean;
-  // Show breadcrumb icon
+  // Show breadcrumb icon 显示面包屑icon
   showBreadCrumbIcon: boolean;
   // Use error-handler-plugin
   useErrorHandle: boolean;

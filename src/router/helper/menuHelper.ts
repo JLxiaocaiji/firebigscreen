@@ -1,10 +1,10 @@
-import { AppRouteModule } from '/@/router/types';
-import type { MenuModule, Menu, AppRouteRecordRaw } from '/@/router/types';
-import { findPath, treeMap } from '/@/utils/helper/treeHelper';
-import { cloneDeep } from 'lodash-es';
-import { isUrl } from '/@/utils/is';
-import { RouteParams } from 'vue-router';
-import { toRaw } from 'vue';
+import { AppRouteModule } from "/@/router/types";
+import type { MenuModule, Menu, AppRouteRecordRaw } from "/@/router/types";
+import { findPath, treeMap } from "/@/utils/helper/treeHelper";
+import { cloneDeep } from "lodash-es";
+import { isUrl } from "/@/utils/is";
+import { RouteParams } from "vue-router";
+import { toRaw } from "vue";
 
 export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   // update-begin--author:sunjianlei---date:220230426---for：【issues/478】修复菜单展开合并BUG
@@ -13,8 +13,8 @@ export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   // 先匹配不包含隐藏菜单的路径
   let menuList = findMenuPath(treeData, path, false);
   // 如果没有匹配到，再匹配包含隐藏菜单的路径
-  if(!(menuList?.length)) {
-    menuList = findMenuPath(treeData, path, true)
+  if (!menuList?.length) {
+    menuList = findMenuPath(treeData, path, true);
   }
   // update-end--author:sunjianlei---date:220230426---for：【issues/478】修复菜单展开合并BUG
   return (menuList || []).map((item) => item.path);
@@ -30,15 +30,15 @@ export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
 function findMenuPath<T = Recordable>(treeData: T[], path: string, matchHide: boolean) {
   return findPath(treeData, (n) => {
     // 隐藏菜单不参与匹配
-    if(!matchHide && n.hideMenu) {
+    if (!matchHide && n.hideMenu) {
       return false;
     }
-    return n.path === path
+    return n.path === path;
   }) as Menu[];
 }
 
 // 路径处理
-function joinParentPath(menus: Menu[], parentPath = '') {
+function joinParentPath(menus: Menu[], parentPath = "") {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index];
     // https://next.router.vuejs.org/guide/essentials/nested-routes.html
@@ -46,7 +46,7 @@ function joinParentPath(menus: Menu[], parentPath = '') {
     // 请注意，以 / 开头的嵌套路径将被视为根路径。
     // This allows you to leverage the component nesting without having to use a nested URL.
     // 这允许你利用组件嵌套，而无需使用嵌套 URL。
-    if (!(menu.path.startsWith('/') || isUrl(menu.path))) {
+    if (!(menu.path.startsWith("/") || isUrl(menu.path))) {
       // path doesn't start with /, nor is it a url, join parent path
       // 路径不以 / 开头，也不是 url，加入父路径
       menu.path = `${parentPath}/${menu.path}`;
@@ -57,7 +57,7 @@ function joinParentPath(menus: Menu[], parentPath = '') {
   }
 }
 
-// Parsing the menu module
+// 解析左侧菜单模块
 export function transformMenuModule(menuModule: MenuModule): Menu {
   const { menu } = menuModule;
 
@@ -75,7 +75,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
 
   // 对路由项进行修改
   cloneRouteModList.forEach((item) => {
-    if (routerMapping && item.meta.hideChildrenInMenu && typeof item.redirect === 'string') {
+    if (routerMapping && item.meta.hideChildrenInMenu && typeof item.redirect === "string") {
       item.path = item.redirect;
     }
 
@@ -96,7 +96,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
         meta: node.meta,
         name: title,
         hideMenu,
-        alwaysShow:node.alwaysShow||false,
+        alwaysShow: node.alwaysShow || false,
         path: node.path,
         ...(node.redirect ? { redirect: node.redirect } : {}),
       };

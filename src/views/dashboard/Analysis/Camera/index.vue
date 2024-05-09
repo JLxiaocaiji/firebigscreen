@@ -42,8 +42,6 @@
       //当文件准备完成后，开始拉流。
       player.connect();
     });
-
-    console.log(11111);
     console.log(PlayerControl);
     // console.log(player);
 

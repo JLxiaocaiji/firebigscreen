@@ -1,30 +1,31 @@
 <script lang="tsx">
-  import type { PropType, CSSProperties } from 'vue';
+  import type { PropType, CSSProperties } from "vue";
 
-  import { computed, defineComponent, unref, toRef } from 'vue';
-  import { BasicMenu } from '/@/components/Menu';
-  import { SimpleMenu } from '/@/components/SimpleMenu';
-  import { AppLogo } from '/@/components/Application';
+  import { computed, defineComponent, unref, toRef } from "vue";
+  import { BasicMenu } from "/@/components/Menu";
+  import { SimpleMenu } from "/@/components/SimpleMenu";
+  import { AppLogo } from "/@/components/Application";
 
-  import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
+  import { MenuModeEnum, MenuSplitTyeEnum } from "/@/enums/menuEnum";
 
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-  import { ScrollContainer } from '/@/components/Container';
+  import { useMenuSetting } from "/@/hooks/setting/useMenuSetting";
+  import { ScrollContainer } from "/@/components/Container";
 
-  import { useGo } from '/@/hooks/web/usePage';
-  import { useSplitMenu } from './useLayoutMenu';
-  import { openWindow } from '/@/utils';
-  import { propTypes } from '/@/utils/propTypes';
-  import { isUrl } from '/@/utils/is';
-  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-  import { useAppInject } from '/@/hooks/web/useAppInject';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useLocaleStore } from '/@/store/modules/locale';
+  import { useGo } from "/@/hooks/web/usePage";
+  import { useSplitMenu } from "./useLayoutMenu";
+  import { openWindow } from "/@/utils";
+  import { propTypes } from "/@/utils/propTypes";
+  import { isUrl } from "/@/utils/is";
+  import { useRootSetting } from "/@/hooks/setting/useRootSetting";
+  import { useAppInject } from "/@/hooks/web/useAppInject";
+  import { useDesign } from "/@/hooks/web/useDesign";
+  import { useLocaleStore } from "/@/store/modules/locale";
 
+  // 定义 LayoutMenu 并获得对应的类型
   export default defineComponent({
-    name: 'LayoutMenu',
+    name: "LayoutMenu",
     props: {
-      theme: propTypes.oneOf(['light', 'dark']),
+      theme: propTypes.oneOf(["light", "dark"]),
 
       splitType: {
         type: Number as PropType<MenuSplitTyeEnum>,
@@ -35,9 +36,10 @@
       // menu Mode
       menuMode: {
         type: [String] as PropType<Nullable<MenuModeEnum>>,
-        default: '',
+        default: "",
       },
     },
+    // 在 setup() 函数中返回的对象会暴露给模板和组件实例,会自动浅层解包
     setup(props) {
       const go = useGo();
 
@@ -54,9 +56,9 @@
       } = useMenuSetting();
       const { getShowLogo } = useRootSetting();
 
-      const { prefixCls } = useDesign('layout-menu');
+      const { prefixCls } = useDesign("layout-menu");
 
-      const { menusRef } = useSplitMenu(toRef(props, 'splitType'));
+      const { menusRef } = useSplitMenu(toRef(props, "splitType"));
 
       const { getIsMobile } = useAppInject();
 
@@ -75,7 +77,7 @@
 
       const getWrapperStyle = computed((): CSSProperties => {
         return {
-          height: `calc(100% - ${unref(getIsShowLogo) ? '48px' : '0px'})`,
+          height: `calc(100% - ${unref(getIsShowLogo) ? "48px" : "0px"})`,
         };
       });
 
@@ -110,7 +112,7 @@
       const localeStore = useLocaleStore();
       function handleMenuClick(path: string, item) {
         if (item) {
-          localeStore.setPathTitle(path, item.title || '');
+          localeStore.setPathTitle(path, item.title || "");
         }
         go(path);
       }
@@ -171,8 +173,8 @@
   // update-end--author:liaozhiyang---date:20230803---for：【QQYUN-5872】菜单优化，上下滚动条去掉
 </style>
 <style lang="less">
-  @prefix-cls: ~'@{namespace}-layout-menu';
-  @logo-prefix-cls: ~'@{namespace}-app-logo';
+  @prefix-cls: ~"@{namespace}-layout-menu";
+  @logo-prefix-cls: ~"@{namespace}-app-logo";
 
   .@{prefix-cls} {
     &-logo {

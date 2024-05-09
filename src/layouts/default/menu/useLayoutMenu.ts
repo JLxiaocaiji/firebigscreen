@@ -1,13 +1,13 @@
-import type { Menu } from '/@/router/types';
-import type { Ref } from 'vue';
-import { watch, unref, ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { MenuSplitTyeEnum } from '/@/enums/menuEnum';
-import { useThrottleFn } from '@vueuse/core';
-import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-import { getChildrenMenus, getCurrentParentPath, getMenus, getShallowMenus } from '/@/router/menus';
-import { usePermissionStore } from '/@/store/modules/permission';
-import { useAppInject } from '/@/hooks/web/useAppInject';
+import type { Menu } from "/@/router/types";
+import type { Ref } from "vue";
+import { watch, unref, ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { MenuSplitTyeEnum } from "/@/enums/menuEnum";
+import { useThrottleFn } from "@vueuse/core";
+import { useMenuSetting } from "/@/hooks/setting/useMenuSetting";
+import { getChildrenMenus, getCurrentParentPath, getMenus, getShallowMenus } from "/@/router/menus";
+import { usePermissionStore } from "/@/store/modules/permission";
+import { useAppInject } from "/@/hooks/web/useAppInject";
 
 export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
   // Menu array
@@ -84,7 +84,7 @@ export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
     menusRef.value = children;
   }
 
-  // get menus
+  // 获取侧边栏 menu
   async function genMenus() {
     // normal mode
     if (unref(normalType) || unref(getIsMobile)) {

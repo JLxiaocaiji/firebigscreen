@@ -25,7 +25,7 @@ export const getMenuList = () => {
 };
 
 /**
- * @description: 获取后台菜单权限和按钮权限
+ * @description: 获取后台菜单权限和按钮权限, 左侧菜单列表
  */
 export function getBackMenuAndPerms() {
   return defHttp.get({ url: Api.GetMenuList });

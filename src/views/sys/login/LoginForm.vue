@@ -9,7 +9,7 @@
     </FormItem>
 
     <!--验证码-->
-    <ARow class="enter-x">
+    <!-- <ARow class="enter-x">
       <ACol :span="12">
         <FormItem name="inputCode" class="enter-x">
           <Input size="large" v-model:value="formData.inputCode" :placeholder="t('sys.login.inputCode')" style="min-width: 100px" />
@@ -26,7 +26,7 @@
           <img v-else style="margin-top: 2px; max-width: initial" src="../../../assets/images/checkcode.png" @click="handleChangeCheckCode" />
         </FormItem>
       </ACol>
-    </ARow>
+    </ARow> -->
 
     <ARow class="enter-x">
       <ACol :span="12">

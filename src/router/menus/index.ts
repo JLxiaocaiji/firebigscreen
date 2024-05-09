@@ -1,16 +1,17 @@
-import type { Menu, MenuModule } from '/@/router/types';
-import type { RouteRecordNormalized } from 'vue-router';
+import type { Menu, MenuModule } from "/@/router/types";
+import type { RouteRecordNormalized } from "vue-router";
 
-import { useAppStoreWithOut } from '/@/store/modules/app';
-import { usePermissionStore } from '/@/store/modules/permission';
-import { transformMenuModule, getAllParentPath } from '/@/router/helper/menuHelper';
-import { filter } from '/@/utils/helper/treeHelper';
-import { isUrl } from '/@/utils/is';
-import { router } from '/@/router';
-import { PermissionModeEnum } from '/@/enums/appEnum';
-import { pathToRegexp } from 'path-to-regexp';
+import { useAppStoreWithOut } from "/@/store/modules/app";
+import { usePermissionStore } from "/@/store/modules/permission";
+import { transformMenuModule, getAllParentPath } from "/@/router/helper/menuHelper";
+import { filter } from "/@/utils/helper/treeHelper";
+import { isUrl } from "/@/utils/is";
+import { router } from "/@/router";
+import { PermissionModeEnum } from "/@/enums/appEnum";
+import { pathToRegexp } from "path-to-regexp";
 
-const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
+// 导入匹配的 ts 文件
+const modules = import.meta.glob("./modules/**/*.ts", { eager: true });
 
 const menuModules: MenuModule[] = [];
 
@@ -53,15 +54,23 @@ const staticMenus: Menu[] = [];
 
 async function getAsyncMenus() {
   const permissionStore = usePermissionStore();
+  //   console.log(11111);
+  //   console.log(permissionStore);
+  //   console.log(isBackMode());
+  //   console.log(isRouteMappingMode());
+
+  // 默认 true, Array(12)
   if (isBackMode()) {
     return permissionStore.getBackMenuList.filter((item) => !item.meta?.hideMenu && !item.hideMenu);
   }
+  // 默认 false, Array(0)
   if (isRouteMappingMode()) {
     return permissionStore.getFrontMenuList.filter((item) => !item.hideMenu);
   }
   return staticMenus;
 }
 
+// 侧边栏 menu
 export const getMenus = async (): Promise<Menu[]> => {
   const menus = await getAsyncMenus();
   if (isRoleMode()) {

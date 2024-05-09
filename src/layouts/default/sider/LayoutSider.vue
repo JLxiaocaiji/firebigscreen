@@ -17,27 +17,29 @@
     <template #trigger v-if="getShowTrigger">
       <LayoutTrigger />
     </template>
+
+    <!-- 侧边栏 -->
     <LayoutMenu :theme="getMenuTheme" :menuMode="getMode" :splitType="getSplitType" />
     <DragBar ref="dragBarRef" />
   </Sider>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, ref, unref, CSSProperties, h } from 'vue';
+  import { computed, defineComponent, ref, unref, CSSProperties, h } from "vue";
 
-  import { Layout } from 'ant-design-vue';
-  import LayoutMenu from '../menu/index.vue';
-  import LayoutTrigger from '/@/layouts/default/trigger/index.vue';
+  import { Layout } from "ant-design-vue";
+  import LayoutMenu from "../menu/index.vue";
+  import LayoutTrigger from "/@/layouts/default/trigger/index.vue";
 
-  import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
+  import { MenuModeEnum, MenuSplitTyeEnum } from "/@/enums/menuEnum";
 
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-  import { useTrigger, useDragLine, useSiderEvent } from './useLayoutSider';
-  import { useAppInject } from '/@/hooks/web/useAppInject';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useMenuSetting } from "/@/hooks/setting/useMenuSetting";
+  import { useTrigger, useDragLine, useSiderEvent } from "./useLayoutSider";
+  import { useAppInject } from "/@/hooks/web/useAppInject";
+  import { useDesign } from "/@/hooks/web/useDesign";
 
-  import DragBar from './DragBar.vue';
+  import DragBar from "./DragBar.vue";
   export default defineComponent({
-    name: 'LayoutSideBar',
+    name: "LayoutSideBar",
     components: { Sider: Layout.Sider, LayoutMenu, DragBar, LayoutTrigger },
     setup() {
       const dragBarRef = ref<ElRef>(null);
@@ -46,7 +48,7 @@
       const { getCollapsed, getMenuWidth, getSplit, getMenuTheme, getRealWidth, getMenuHidden, getMenuFixed, getIsMixMode, toggleCollapsed } =
         useMenuSetting();
 
-      const { prefixCls } = useDesign('layout-sideBar');
+      const { prefixCls } = useDesign("layout-sideBar");
 
       const { getIsMobile } = useAppInject();
 
@@ -82,11 +84,11 @@
         const width = `${unref(getRealWidth)}px`;
         return {
           width: width,
-          overflow: 'hidden',
+          overflow: "hidden",
           flex: `0 0 ${width}`,
           maxWidth: width,
           minWidth: width,
-          transition: 'all 0.2s',
+          transition: "all 0.2s",
         };
       });
 
@@ -119,7 +121,7 @@
   });
 </script>
 <style lang="less">
-  @prefix-cls: ~'@{namespace}-layout-sideBar';
+  @prefix-cls: ~"@{namespace}-layout-sideBar";
 
   .@{prefix-cls} {
     z-index: @layout-sider-fixed-z-index;

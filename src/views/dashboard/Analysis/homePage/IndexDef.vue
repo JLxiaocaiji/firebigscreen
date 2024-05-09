@@ -1,17 +1,17 @@
 <template>
   <div class="p-4">
-    <!-- <GrowCard :loading="loading" class="enter-y" /> -->
+    <GrowCard :loading="loading" class="enter-y" />
 
-    <a-row :gutter="16">
+    <!-- <a-row :gutter="16">
       <a-col :span="18">
         <TopCard />
         <SearchMenu />
       </a-col>
 
       <a-col :span="6">
-        <Monitor />
+        <RightContent />
       </a-col>
-    </a-row>
+    </a-row> -->
 
     <SiteAnalysis class="!my-4 enter-y" :loading="loading" />
     <div class="md:flex enter-y">
@@ -23,11 +23,12 @@
 </template>
 <script lang="ts" setup>
   import { ref } from "vue";
-  //   import GrowCard from '../components/GrowCard.vue';
-  import TopCard from "../TopCard/index.vue";
-  import SearchMenu from "../SearchMenu/index.vue";
-  import Monitor from "../RightContent/index.vue";
 
+  //   import TopCard from "../TopCard/index.vue";
+  //   import SearchMenu from "../SearchMenu/index.vue";
+  //   import RightContent from "../RightContent/index.vue";
+
+  import GrowCard from "../components/GrowCard.vue";
   import SiteAnalysis from "../components/SiteAnalysis.vue";
   import VisitSource from "../components/VisitSource.vue";
   import VisitRadar from "../components/VisitRadar.vue";

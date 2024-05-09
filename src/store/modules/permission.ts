@@ -1,27 +1,27 @@
-import type { AppRouteRecordRaw, Menu } from '/@/router/types';
+import type { AppRouteRecordRaw, Menu } from "/@/router/types";
 
-import { defineStore } from 'pinia';
-import { store } from '/@/store';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { useUserStore } from './user';
-import { useAppStoreWithOut } from './app';
-import { toRaw } from 'vue';
-import { transformObjToRoute, flatMultiLevelRoutes, addSlashToRouteComponent } from '/@/router/helper/routeHelper';
-import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import { defineStore } from "pinia";
+import { store } from "/@/store";
+import { useI18n } from "/@/hooks/web/useI18n";
+import { useUserStore } from "./user";
+import { useAppStoreWithOut } from "./app";
+import { toRaw } from "vue";
+import { transformObjToRoute, flatMultiLevelRoutes, addSlashToRouteComponent } from "/@/router/helper/routeHelper";
+import { transformRouteToMenu } from "/@/router/helper/menuHelper";
 
-import projectSetting from '/@/settings/projectSetting';
+import projectSetting from "/@/settings/projectSetting";
 
-import { PermissionModeEnum } from '/@/enums/appEnum';
+import { PermissionModeEnum } from "/@/enums/appEnum";
 
-import { asyncRoutes } from '/@/router/routes';
-import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { asyncRoutes } from "/@/router/routes";
+import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from "/@/router/routes/basic";
 
-import { filter } from '/@/utils/helper/treeHelper';
+import { filter } from "/@/utils/helper/treeHelper";
 
-import { getBackMenuAndPerms } from '/@/api/sys/menu';
+import { getBackMenuAndPerms } from "/@/api/sys/menu";
 
-import { useMessage } from '/@/hooks/web/useMessage';
-import { PageEnum } from '/@/enums/pageEnum';
+import { useMessage } from "/@/hooks/web/useMessage";
+import { PageEnum } from "/@/enums/pageEnum";
 
 // 系统权限
 interface AuthItem {
@@ -56,7 +56,7 @@ interface PermissionState {
   onlineSubTableAuthMap: object;
 }
 export const usePermissionStore = defineStore({
-  id: 'app-permission',
+  id: "app-permission",
   state: (): PermissionState => ({
     permCodeList: [],
     // Whether the route has been dynamically added
@@ -122,12 +122,14 @@ export const usePermissionStore = defineStore({
       this.backMenuList = [];
       this.lastBuildMenuTime = 0;
     },
+
+    // 获取路由数据， 进一步得到左侧菜单列表
     async changePermissionCode() {
       const systemPermission = await getBackMenuAndPerms();
       const codeList = systemPermission.codeList;
       this.setPermCodeList(codeList);
       this.setAuthData(systemPermission);
-      
+
       //菜单路由
       const routeList = systemPermission.menu;
       return routeList;
@@ -160,17 +162,17 @@ export const usePermissionStore = defineStore({
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return;
         let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
-        function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
-          if (parentPath) parentPath = parentPath + '/';
+        function patcher(routes: AppRouteRecordRaw[], parentPath = "") {
+          if (parentPath) parentPath = parentPath + "/";
           routes.forEach((route: AppRouteRecordRaw) => {
             const { path, children, redirect } = route;
-            const currentPath = path.startsWith('/') ? path : parentPath + path;
+            const currentPath = path.startsWith("/") ? path : parentPath + path;
             if (currentPath === homePath) {
               if (redirect) {
                 homePath = route.redirect! as string;
               } else {
                 route.meta = Object.assign({}, route.meta, { affix: true });
-                throw new Error('end');
+                throw new Error("end");
               }
             }
             children && children.length > 0 && patcher(children, currentPath);
@@ -210,7 +212,7 @@ export const usePermissionStore = defineStore({
         // 后台菜单构建
         case PermissionModeEnum.BACK:
           const { createMessage, createWarningModal } = useMessage();
-          console.log(" --- 构建后台路由菜单 --- ")
+          console.log(" --- 构建后台路由菜单 --- ");
           // 菜单加载提示
           // createMessage.loading({
           //   content: t('sys.app.menuLoading'),
@@ -266,7 +268,7 @@ export const usePermissionStore = defineStore({
           // 动态引入组件
           routeList = transformObjToRoute(routeList);
 
-          // 构建后台路由菜单
+          // 构建后台路由菜单, 根据请求的路由获取 对应 左侧菜单栏
           const backMenuList = transformRouteToMenu(routeList);
           this.setBackMenuList(backMenuList);
 

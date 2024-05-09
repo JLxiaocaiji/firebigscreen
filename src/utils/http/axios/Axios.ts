@@ -1,18 +1,18 @@
-import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import type { RequestOptions, Result, UploadFileParams, UploadFileCallBack } from '/#/axios';
-import type { CreateAxiosOptions } from './axiosTransform';
-import axios from 'axios';
-import qs from 'qs';
-import { AxiosCanceler } from './axiosCancel';
-import { isFunction } from '/@/utils/is';
-import { cloneDeep } from 'lodash-es';
-import { ContentTypeEnum } from '/@/enums/httpEnum';
-import { RequestEnum } from '/@/enums/httpEnum';
-import { useGlobSetting } from '/@/hooks/setting';
-import { useMessage } from '/@/hooks/web/useMessage';
+import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from "axios";
+import type { RequestOptions, Result, UploadFileParams, UploadFileCallBack } from "/#/axios";
+import type { CreateAxiosOptions } from "./axiosTransform";
+import axios from "axios";
+import qs from "qs";
+import { AxiosCanceler } from "./axiosCancel";
+import { isFunction } from "/@/utils/is";
+import { cloneDeep } from "lodash-es";
+import { ContentTypeEnum } from "/@/enums/httpEnum";
+import { RequestEnum } from "/@/enums/httpEnum";
+import { useGlobSetting } from "/@/hooks/setting";
+import { useMessage } from "/@/hooks/web/useMessage";
 
 const { createMessage } = useMessage();
-export * from './axiosTransform';
+export * from "./axiosTransform";
 
 /**
  * @description:  axios module
@@ -117,7 +117,7 @@ export class VAxios {
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams, callback?: UploadFileCallBack) {
     //--@updateBy-end----author:liusq---date:20211117------for:增加上传回调参数callback------
     const formData = new window.FormData();
-    const customFilename = params.name || 'file';
+    const customFilename = params.name || "file";
 
     if (params.filename) {
       formData.append(customFilename, params.file, params.filename);
@@ -143,10 +143,10 @@ export class VAxios {
     return this.axiosInstance
       .request<T>({
         ...config,
-        method: 'POST',
+        method: "POST",
         data: formData,
         headers: {
-          'Content-type': ContentTypeEnum.FORM_DATA,
+          "Content-type": ContentTypeEnum.FORM_DATA,
           ignoreCancelToken: true,
         },
       })
@@ -172,32 +172,32 @@ export class VAxios {
   // 支持表单数据
   supportFormData(config: AxiosRequestConfig) {
     const headers = config.headers || this.options.headers;
-    const contentType = headers?.['Content-Type'] || headers?.['content-type'];
+    const contentType = headers?.["Content-Type"] || headers?.["content-type"];
 
-    if (contentType !== ContentTypeEnum.FORM_URLENCODED || !Reflect.has(config, 'data') || config.method?.toUpperCase() === RequestEnum.GET) {
+    if (contentType !== ContentTypeEnum.FORM_URLENCODED || !Reflect.has(config, "data") || config.method?.toUpperCase() === RequestEnum.GET) {
       return config;
     }
 
     return {
       ...config,
-      data: qs.stringify(config.data, { arrayFormat: 'brackets' }),
+      data: qs.stringify(config.data, { arrayFormat: "brackets" }),
     };
   }
 
   get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    return this.request({ ...config, method: 'GET' }, options);
+    return this.request({ ...config, method: "GET" }, options);
   }
 
   post<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    return this.request({ ...config, method: 'POST' }, options);
+    return this.request({ ...config, method: "POST" }, options);
   }
 
   put<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    return this.request({ ...config, method: 'PUT' }, options);
+    return this.request({ ...config, method: "PUT" }, options);
   }
 
   delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
-    return this.request({ ...config, method: 'DELETE' }, options);
+    return this.request({ ...config, method: "DELETE" }, options);
   }
 
   request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
@@ -228,7 +228,7 @@ export class VAxios {
               //zhangyafei---添加回调方法
               resolve(ret);
             } catch (err) {
-              reject(err || new Error('request error!'));
+              reject(err || new Error("request error!"));
             }
             return;
           }
@@ -247,7 +247,6 @@ export class VAxios {
     });
   }
 
-
   /**
    * 【用于评论功能】自定义文件上传-请求
    * @param url
@@ -255,16 +254,15 @@ export class VAxios {
    */
   uploadMyFile<T = any>(url, formData) {
     const glob = useGlobSetting();
-    return this.axiosInstance
-      .request<T>({
-        url: url,
-        baseURL: glob.uploadUrl,
-        method: 'POST',
-        data: formData,
-        headers: {
-          'Content-type': ContentTypeEnum.FORM_DATA,
-          ignoreCancelToken: true,
-        },
-      });
+    return this.axiosInstance.request<T>({
+      url: url,
+      baseURL: glob.uploadUrl,
+      method: "POST",
+      data: formData,
+      headers: {
+        "Content-type": ContentTypeEnum.FORM_DATA,
+        ignoreCancelToken: true,
+      },
+    });
   }
 }

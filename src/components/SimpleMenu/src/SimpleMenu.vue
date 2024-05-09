@@ -13,25 +13,25 @@
   </Menu>
 </template>
 <script lang="ts">
-  import type { MenuState } from './types';
-  import type { Menu as MenuType } from '/@/router/types';
-  import type { RouteLocationNormalizedLoaded } from 'vue-router';
-  import { defineComponent, computed, ref, unref, reactive, toRefs, watch } from 'vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import Menu from './components/Menu.vue';
-  import SimpleSubMenu from './SimpleSubMenu.vue';
-  import { listenerRouteChange } from '/@/logics/mitt/routeChange';
-  import { propTypes } from '/@/utils/propTypes';
-  import { REDIRECT_NAME } from '/@/router/constant';
-  import { useRouter } from 'vue-router';
-  import { isFunction, isUrl } from '/@/utils/is';
-  import { openWindow } from '/@/utils';
+  import type { MenuState } from "./types";
+  import type { Menu as MenuType } from "/@/router/types";
+  import type { RouteLocationNormalizedLoaded } from "vue-router";
+  import { defineComponent, computed, ref, unref, reactive, toRefs, watch } from "vue";
+  import { useDesign } from "/@/hooks/web/useDesign";
+  import Menu from "./components/Menu.vue";
+  import SimpleSubMenu from "./SimpleSubMenu.vue";
+  import { listenerRouteChange } from "/@/logics/mitt/routeChange";
+  import { propTypes } from "/@/utils/propTypes";
+  import { REDIRECT_NAME } from "/@/router/constant";
+  import { useRouter } from "vue-router";
+  import { isFunction, isUrl } from "/@/utils/is";
+  import { openWindow } from "/@/utils";
 
-  import { useOpenKeys } from './useOpenKeys';
-  import { URL_HASH_TAB } from '/@/utils';
+  import { useOpenKeys } from "./useOpenKeys";
+  import { URL_HASH_TAB } from "/@/utils";
 
   export default defineComponent({
-    name: 'SimpleMenu',
+    name: "SimpleMenu",
     components: {
       Menu,
       SimpleSubMenu,
@@ -52,19 +52,19 @@
       },
       isSplitMenu: propTypes.bool,
     },
-    emits: ['menuClick'],
+    emits: ["menuClick"],
     setup(props, { attrs, emit }) {
-      const currentActiveMenu = ref('');
+      const currentActiveMenu = ref("");
       const isClickGo = ref(false);
 
       const menuState = reactive<MenuState>({
-        activeName: '',
+        activeName: "",
         openNames: [],
         activeSubMenuNames: [],
       });
 
       const { currentRoute } = useRouter();
-      const { prefixCls } = useDesign('simple-menu');
+      const { prefixCls } = useDesign("simple-menu");
       const { items, accordion, mixSider, collapse } = toRefs(props);
 
       const { setOpenKeys, getOpenKeys } = useOpenKeys(menuState, items, accordion, mixSider, collapse);
@@ -91,7 +91,7 @@
           }
           setOpenKeys(currentRoute.value.path);
         },
-        { flush: 'post' }
+        { flush: "post" }
       );
 
       listenerRouteChange((route) => {
@@ -121,8 +121,8 @@
       async function handleSelect(key: string) {
         if (isUrl(key)) {
           // update-begin--author:sunjianlei---date:20220408---for: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
-          let url = key.replace(URL_HASH_TAB, '#');
-          window.open(url)
+          let url = key.replace(URL_HASH_TAB, "#");
+          window.open(url);
           //openWindow(url);
           // update-begin--author:sunjianlei---date:20220408---for: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
           return;
@@ -141,7 +141,7 @@
           if (!flag) return;
         }
 
-        emit('menuClick', key);
+        emit("menuClick", key);
 
         isClickGo.value = true;
         setOpenKeys(key);
@@ -165,8 +165,8 @@
             }
           }
         }
-        return '';
-      }
+        return "";
+      };
 
       return {
         prefixCls,
@@ -179,5 +179,5 @@
   });
 </script>
 <style lang="less">
-  @import './index.less';
+  @import "./index.less";
 </style>
