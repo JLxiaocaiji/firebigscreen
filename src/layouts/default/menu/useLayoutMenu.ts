@@ -47,7 +47,7 @@ export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
     }
   );
 
-  // Menu changes
+  // 监听 store 中 menu 变化
   watch(
     [() => permissionStore.getLastBuildMenuTime, () => permissionStore.getBackMenuList],
     () => {
@@ -95,7 +95,8 @@ export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
     // split-top
     if (unref(getSpiltTop)) {
       const shallowMenus = await getShallowMenus();
-
+        console.log(33333)
+        console.log(shallowMenus)
       menusRef.value = shallowMenus;
       return;
     }

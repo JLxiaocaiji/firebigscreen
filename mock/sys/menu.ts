@@ -241,15 +241,18 @@ export default [
     timeout: 1000,
     method: "get",
     response: (request: requestParams) => {
+      // 获取 token
       const token = getRequestToken(request);
       if (!token) {
         return resultError("Invalid token!");
       }
+      // 找到相同 token 的角色用户
       const checkUser = createFakeUserList().find((item) => item.token === token);
       if (!checkUser) {
         return resultError("Invalid user token!");
       }
       const id = checkUser.userId;
+      // 根据 userId
       let menu: Object[];
       switch (id) {
         case "1":

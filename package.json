@@ -26,6 +26,7 @@
     "@dataview/datav-vue3": "^0.0.0-test.1672506674342",
     "@iconify/iconify": "^3.1.1",
     "@jeecg/online": "3.6.2-beta",
+    "@kjgl77/datav-vue3": "^1.7.2",
     "@tinymce/tinymce-vue": "^4.0.7",
     "@traptitech/markdown-it-katex": "^3.6.0",
     "@vue/shared": "^3.3.4",

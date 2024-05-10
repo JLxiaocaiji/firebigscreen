@@ -1,8 +1,8 @@
-import { defHttp } from '/@/utils/http/axios';
-import { getMenuListResultModel } from './model/menuModel';
+import { defHttp } from "/@/utils/http/axios";
+import { getMenuListResultModel } from "./model/menuModel";
 
 enum Api {
-  GetMenuList = '/sys/permission/getUserPermissionByToken',
+  GetMenuList = "/sys/permission/getUserPermissionByToken",
   // 【QQYUN-8487】
   // SwitchVue3Menu = '/sys/switchVue3Menu',
 }
@@ -10,7 +10,6 @@ enum Api {
 /**
  * @description: Get user menu based on id
  */
-
 export const getMenuList = () => {
   return new Promise((resolve) => {
     //为了兼容mock和接口数据
@@ -18,7 +17,7 @@ export const getMenuList = () => {
       if (Array.isArray(res)) {
         resolve(res);
       } else {
-        resolve(res['menu']);
+        resolve(res["menu"]);
       }
     });
   });
@@ -27,6 +26,7 @@ export const getMenuList = () => {
 /**
  * @description: 获取后台菜单权限和按钮权限, 左侧菜单列表
  */
+// 向后台请求的接口，非 mock
 export function getBackMenuAndPerms() {
   return defHttp.get({ url: Api.GetMenuList });
 }
@@ -34,7 +34,7 @@ export function getBackMenuAndPerms() {
 /**
  * 切换成vue3菜单
  */
- // update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8487】注释掉判断菜单是否vue2版本逻辑代码
+// update-begin--author:liaozhiyang---date:20240313---for：【QQYUN-8487】注释掉判断菜单是否vue2版本逻辑代码
 // export const switchVue3Menu = () => {
 //   return new Promise((resolve) => {
 //     defHttp.get({ url: Api.SwitchVue3Menu });
