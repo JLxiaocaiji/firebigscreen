@@ -21,4 +21,18 @@
   import { list1, list2 } from "./index";
 </script>
 
-<style lang="" scoped></style>
+<style lang="less" scoped>
+  .h-left {
+    margin-left: 45px;
+    // height: 200px;
+  }
+
+  .h-right {
+    margin-right: 45px;
+  }
+
+  .h-avatar {
+    position: absolute;
+    right: 25px;
+  }
+</style>

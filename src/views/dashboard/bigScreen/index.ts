@@ -1,4 +1,7 @@
 import { reactive } from "vue";
+/*
+    类型 import 
+*/
 import { HeaderItem } from "./index.d";
 
 export const list1 = reactive<HeaderItem[]>([
@@ -13,3 +16,9 @@ export const list2 = reactive<HeaderItem[]>([
   { label: "安全分析", value: "3", url: "" },
   { label: "消息通知", value: "4", url: "" },
 ]);
+
+/*
+    组件 export
+*/
+export { default as ContentHeader } from "@/views/dashboard/bigScreen/ContentHeader.vue";
+export { default as ContentHeaderCard } from "./ContentHeaderCard.vue";

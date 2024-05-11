@@ -5,13 +5,25 @@
       <a-layout-header class="h">
         <Header />
       </a-layout-header>
-      <a-layout-content class="contentStyle">Content</a-layout-content>
+      <a-layout-content class="c">
+        <ContentHeader class="c-home-content" />
+        <ConditionChoose @change="select" />
+      </a-layout-content>
     </a-layout>
   </div>
 </template>
 
 <script lang="ts" setup>
- import Header from './header.vue';
+  import Header from "./header.vue";
+  import ContentHeader from "./ContentHeader.vue";
+
+  import ConditionChoose from "./ConditionChoose.vue";
+
+  import { reactive, ref } from "vue";
+
+  const select = (i) => {
+    console.log(i);
+  };
 </script>
 
 <style lang="less" scoped>
@@ -32,23 +44,17 @@
     color: #fff;
     font-size: 22px;
     padding: 0 20px;
-
-    &-left {
-      margin-left: 45px;
-      height: 200px;
-    }
-
-    &-right {
-      margin-right: 45px;
-    }
-
-    &-avatar {
-      position: absolute;
-      right: 35px;
-    }
   }
 
-  .contentStyle {
+  .c {
     height: calc(100% - 84px);
+
+    &-home-content {
+      display: flex;
+      -webkit-box-pack: center;
+      justify-content: center;
+      width: 100%;
+      height: 50%;
+    }
   }
 </style>
