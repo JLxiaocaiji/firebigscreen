@@ -78,7 +78,7 @@
   */
   const key = ref("tab1");
 
-  const tabList = reactive([
+  const tabList = [
     {
       key: "tab1",
       tab: "设备监测",
@@ -87,7 +87,7 @@
       key: "tab2",
       tab: "火警监测",
     },
-  ]);
+  ];
 
   const onTabChange = (value: string) => {
     console.log(value);

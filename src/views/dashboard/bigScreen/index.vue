@@ -8,6 +8,15 @@
       <a-layout-content class="c">
         <ContentHeader class="c-home-content" />
         <ConditionChoose @change="select" />
+
+        <div>
+          <a-card :tab-list="tabList" :active-tab-key="key" @tab-change="(key) => onTabChange(key, 'key')">
+            <template #title><img src="@/assets/images/card-title.png" />单位消防安全评分</template>
+            <template #extra> <a href="#">更多</a></template>
+            <div v-if="key === 'tab1'">1</div>
+            <div v-else>2</div>
+          </a-card>
+        </div>
       </a-layout-content>
     </a-layout>
   </div>
@@ -23,6 +32,24 @@
 
   const select = (i) => {
     console.log(i);
+  };
+
+  const tabList = [
+    {
+      key: "tab1",
+      tab: "企业单位",
+    },
+    {
+      key: "tab2",
+      tab: "维保单位",
+    },
+  ];
+  const key = ref("tab1");
+  const onTabChange = (value: string, type: string) => {
+    console.log(value, type);
+    if (type === "key") {
+      key.value = value;
+    }
   };
 </script>
 
