@@ -1,5 +1,5 @@
 <template>
-  <a-form layout="inline" ref="form" :model="form" class="h-form" :wrapperCol="{ style: { width: '150px' } }">
+  <a-form layout="inline" ref="formRef" :model="form" class="h-form" :wrapperCol="{ style: { width: '150px' } }">
     <a-form-item name="region">
       <a-select v-model:value="form.region" :options="options1" @change="search" />
     </a-form-item>
@@ -20,6 +20,8 @@
   import type { SelectProps } from "ant-design-vue";
 
   import { FormState } from "./index.d";
+
+  const formRef = ref();
 
   const form = reactive<FormState>({
     region: 0,
