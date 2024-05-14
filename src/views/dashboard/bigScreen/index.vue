@@ -9,48 +9,55 @@
         <ContentHeader class="c-home-content" />
         <ConditionChoose @change="select" />
 
-        <div class="c-left">
-          <a-card :tab-list="tabList" :active-tab-key="key" @tab-change="(key) => onTabChange(key)">
-            <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位消防安全评分</span></template>
-            <template #extra> <a href="#">更多</a></template>
-            <div v-if="key === 'tab1'">
-              <!-- <dv-scroll-board :config="config" /> -->
-            </div>
-            <div v-else><dv-scroll-board :config="config" /></div>
-          </a-card>
-
-          <a-card>
-            <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备统计</span></template>
-            <template #extra> <a href="#">更多</a></template>
-            <div class="device-stat">
-              <WaterPolo v-for="item in stat" :key="item.title" :value="item.value" :title="item.title" :color1="item.color1" :color2="item.color2" />
-            </div>
-          </a-card>
-
-          <a-card>
-            <template #title><img src="@/assets/images/card-title.png" /><span class="title">近30天火警处置情况</span></template>
-            <template #extra> <a href="#">更多</a></template>
-            <PieChart :data="fireSum" />
-          </a-card>
-        </div>
-
-        <div class="c-right">
-            <a-card>
-            <template #title><img src="@/assets/images/card-title.png" /><span class="title">视频监控</span></template>
-            <template #extra> <a href="#">更多</a></template>
-            
-          </a-card>
+        <div class="chart">
+          <div class="chart-left">
+            <a-card :tab-list="tabList" :active-tab-key="key" @tab-change="(key) => onTabChange(key)">
+              <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位消防安全评分</span></template>
+              <template #extra> <a href="#">更多</a></template>
+              <div v-if="key === 'tab1'">
+                <!-- <dv-scroll-board :config="config" /> -->
+              </div>
+              <div v-else><dv-scroll-board :config="config" /></div>
+            </a-card>
 
             <a-card>
-            <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备监测情况趋势</span></template>
-            <template #extra> <a href="#">更多</a></template>
-            
-          </a-card>
+              <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备统计</span></template>
+              <template #extra> <a href="#">更多</a></template>
+              <div class="device-stat">
+                <WaterPolo
+                  v-for="item in stat"
+                  :key="item.title"
+                  :value="item.value"
+                  :title="item.title"
+                  :color1="item.color1"
+                  :color2="item.color2"
+                />
+              </div>
+            </a-card>
+
             <a-card>
-            <template #title><img src="@/assets/images/card-title.png" /><span class="title">重要设备监测情况</span></template>
-            <template #extra> <a href="#">更多</a></template>
-            
-          </a-card>
+              <template #title><img src="@/assets/images/card-title.png" /><span class="title">近30天火警处置情况</span></template>
+              <template #extra> <a href="#">更多</a></template>
+              <PieChart :data="fireSum" />
+            </a-card>
+          </div>
+
+          <div class="chart-right">
+            <a-card>
+              <template #title><img src="@/assets/images/card-title.png" /><span class="title">视频监控</span></template>
+              <template #extra> <a href="#">更多</a></template>
+            </a-card>
+
+            <a-card>
+              <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备监测情况趋势</span></template>
+              <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
+              <LineChart />
+            </a-card>
+            <a-card>
+              <template #title><img src="@/assets/images/card-title.png" /><span class="title">重要设备监测情况</span></template>
+              <template #extra> <a href="#">更多</a></template>
+            </a-card>
+          </div>
         </div>
       </a-layout-content>
     </a-layout>
@@ -65,8 +72,9 @@
 
   import { reactive, ref } from "vue";
 
-  import WaterPolo from "./WaterPolo.vue";
-  import PieChart from "./PieChart.vue";
+  import WaterPolo from "./chart/WaterPolo.vue";
+  import PieChart from "./chart/PieChart.vue";
+  import LineChart from "./chart/LineChart.vue";
 
   const select = (i) => {
     console.log(i);
@@ -126,6 +134,15 @@
     real: 1,
     fake: 985,
   });
+
+  // 单位设备监测情况
+  const address = ref<number>();
+  const options = [
+    { label: "地点1", value: 1 },
+    { label: "地点2", value: 2 },
+    { label: "地点3", value: 3 },
+    { label: "地点4", value: 4 },
+  ];
 </script>
 
 <style lang="less" scoped>
@@ -158,6 +175,11 @@
       width: 100%;
       height: 50%;
     }
+  }
+
+  .chart {
+    display: flex;
+    justify-content: space-between;
   }
 
   .ant-card {
@@ -202,6 +224,11 @@
       margin-right: 29px;
       margin-top: 5px;
       font-size: 14px;
+    }
+
+    :deep(.ant-select-selector) {
+      background: transparent;
+      border: 1px solid transparent;
     }
 
     .device-stat {

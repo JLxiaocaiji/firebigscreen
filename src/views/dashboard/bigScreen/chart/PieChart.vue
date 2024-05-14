@@ -1,5 +1,5 @@
 <template>
-  <div ref="pie" class="a"> </div>
+  <div ref="pie"> </div>
 </template>
 
 <script lang="ts" setup>
