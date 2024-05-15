@@ -20,16 +20,16 @@
         orient: "vertical",
         right: "right",
         fontSize: 20,
+        textStyle: {
+          color: "#fff",
+        },
       },
       series: [
         {
           name: "近30天火警处置情况",
           type: "pie",
           radius: "50%",
-          data: [
-            { value: props.data.real, name: "真警", itemStyle: { color: "#1ddd96" } },
-            { value: props.data.fake, name: "虚警", itemStyle: { color: "#ffc452" } },
-          ],
+          ...props.data,
         },
       ],
     });

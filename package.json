@@ -21,6 +21,7 @@
     "husky:install": "husky install"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@ant-design/colors": "^7.0.2",
     "@ant-design/icons-vue": "^7.0.1",
     "@dataview/datav-vue3": "^0.0.0-test.1672506674342",

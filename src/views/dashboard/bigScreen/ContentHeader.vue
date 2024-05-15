@@ -6,20 +6,18 @@
       :key="item.describe"
       @choose="
         (i) => {
+          $emit('change-com', i);
           checked = i;
         }
       "
       :profile="item"
       :index="index"
     />
-
-    
   </div>
 </template>
 
 <script lang="ts" setup>
   import ContentHeaderCard from "./ContentHeaderCard.vue";
-
 
   import { reactive, ref } from "vue";
 
@@ -60,9 +58,9 @@
     },
   ]);
 
+  defineEmits(["change-com"]);
+
   const checked = ref<number>(0);
-
-
 </script>
 
 <style lang="less" scoped>

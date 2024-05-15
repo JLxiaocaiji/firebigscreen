@@ -6,8 +6,12 @@
         <Header />
       </a-layout-header>
       <a-layout-content class="c">
-        <ContentHeader class="c-home-content" />
-        <ConditionChoose @change="select" />
+        <ContentHeader class="c-home-content" @change-com="(i) => (cardIndex = i)" />
+        <ConditionChoose @change="select" v-if="cardIndex == 0" />
+        <div class="device-map" v-if="cardIndex == 1">
+          <span @click="isActive = true" :class="{ 'device-map-active': isActive }">隐患地图</span>
+          <span @click="isActive = false" :class="{ 'device-map-active': !isActive }">隐患热力图</span>
+        </div>
 
         <div class="chart">
           <div class="chart-left">
@@ -15,9 +19,9 @@
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位消防安全评分</span></template>
               <template #extra> <a href="#">更多</a></template>
               <div v-if="key === 'tab1'">
-                <!-- <dv-scroll-board :config="config" /> -->
+                <dv-scroll-board :config="config" style="width: 388px; height: 287px" />
               </div>
-              <div v-else><dv-scroll-board :config="config" /></div>
+              <div v-else><dv-scroll-board :config="config" style="width: 388px; height: 287px" /></div>
             </a-card>
 
             <a-card>
@@ -51,16 +55,35 @@
             <a-card>
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备监测情况趋势</span></template>
               <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
-              <LineChart />
+              <LineChart :data="lineData1" />
             </a-card>
             <a-card>
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">重要设备监测情况</span></template>
               <template #extra> <a href="#">更多</a></template>
+              <RadarChart />
             </a-card>
           </div>
         </div>
+        <div class="chart-bottom">
+          <a-card>
+            <template #title><img src="@/assets/images/card-title.png" /><span class="title">火警趋势</span></template>
+            <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
+            <LineChart :data="lineData2" />
+          </a-card>
+          <a-card>
+            <template #title><img src="@/assets/images/card-title.png" /><span class="title">火警来源分析</span></template>
+            <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
+            <PieChart :data="fireSource" />
+          </a-card>
+          <a-card>
+            <template #title><img src="@/assets/images/card-title.png" /><span class="title">设备异常趋势</span></template>
+            <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
+            <LineChart :data="lineData3" />
+          </a-card>
+        </div>
       </a-layout-content>
     </a-layout>
+    <Map />
   </div>
 </template>
 
@@ -72,9 +95,14 @@
 
   import { reactive, ref } from "vue";
 
+  // 图表
   import WaterPolo from "./chart/WaterPolo.vue";
   import PieChart from "./chart/PieChart.vue";
   import LineChart from "./chart/LineChart.vue";
+  import RadarChart from "./chart/RadarChart.vue";
+
+  // 地图
+  import Map from "./Map.vue";
 
   const select = (i) => {
     console.log(i);
@@ -96,29 +124,37 @@
     key.value = value;
   };
 
+  // 跟随顶部 card 切换组件
+  const cardIndex = ref(0);
+
+  const isActive = ref<boolean>(true);
+
+  /**
+   * 图表相关
+   */
+
   // 单位消防
   const config = reactive({
-    // header: ["", "", "", ""],
     data: [
-      ["1", "路面危害-松散", "5"],
-      ["2", "路面危害-路面油污清理", "13"],
-      ["3", "交安设施-交通标志牌结构", "6"],
-      ["4", "路基危害-防尘网", "2"],
-      ["5", "交安设施-交通标志牌结构", "1"],
-      ["6", "路面危害-松散", "3"],
-      ["7", "路基危害-防尘网", "4"],
-      ["8", "路面危害-路面油污清理", "2"],
-      ["9", "交安设施-交通标志牌结构", "5"],
-      ["10", "路基危害-防尘网", "3"],
+      ["1", "单位1", "80"],
+      ["2", "单位2", "80"],
+      ["3", "单位3", "80"],
+      ["4", "单位4", "80"],
+      ["5", "单位5", "80"],
+      ["6", "单位6", "80"],
+      ["7", "单位7", "81"],
+      ["8", "单位8", "81"],
+      ["9", "单位9", "81"],
+      ["10", "单位10", "81"],
+      ["11", "单位11", "81"],
     ],
-    index: true,
-    columnWidth: [50],
+    // index: true,
+    columnWidth: [50, 200],
     align: ["center"],
-    rowNum: 7,
-    // // headerBGC: "#1981f6",
-    // // headerHeight: 45,
-    // oddRowBGC: "rgba(0, 44, 81, 0.8)",
-    // evenRowBGC: "rgba(10, 29, 50, 0.8)",
+    rowNum: 10,
+    waitTime: 1000,
+    oddRowBGC: "#84b2d8",
+    evenRowBGC: "#919EA8",
   });
 
   // 单位设备统计
@@ -129,13 +165,15 @@
     { value: 0.95, title: "事件处置率", color1: "#9953f6", color2: "#dc13f0" },
   ]);
 
-  // 火警情况
+  // 近30天火警处置情况
   const fireSum = reactive({
-    real: 1,
-    fake: 985,
+    data: [
+      { value: 1, name: "真警", itemStyle: { color: "#1ddd96" } },
+      { value: 985, name: "虚警", itemStyle: { color: "#ffc452" } },
+    ],
   });
 
-  // 单位设备监测情况
+  // 单位设备监测情况趋势
   const address = ref<number>();
   const options = [
     { label: "地点1", value: 1 },
@@ -143,6 +181,153 @@
     { label: "地点3", value: 3 },
     { label: "地点4", value: 4 },
   ];
+  const lineData1 = reactive({
+    legend: {
+      textStyle: {
+        color: "#fff",
+      },
+    },
+    xAxis: {
+      data: ["2024-05-08", "2024-05-09", "2024-05-10", "2024-05-11", "2024-05-12", "2024-05-13", "2024-05-14"],
+    },
+    yAxis: {
+      min: 0,
+      max: 70000,
+    },
+    series: [
+      {
+        name: "设备总数",
+        type: "line",
+        smooth: true,
+        data: [61176, 61176, 61176, 61176, 61176, 61176, 61176],
+        itemStyle: { color: "#33747d" },
+      },
+      {
+        name: "被监听设备总数",
+        type: "line",
+        smooth: true,
+        data: [18561, 18561, 18561, 18561, 18561, 18561, 18561],
+        itemStyle: { color: "#1562b4" },
+      },
+      {
+        name: "在线设备数",
+        type: "line",
+        smooth: true,
+        data: [61273, 61273, 61273, 61273, 61273, 61273, 61273],
+        itemStyle: { color: "#4fc96e" },
+      },
+      {
+        name: "异常设备数",
+        type: "line",
+        smooth: true,
+        data: [8472, 8472, 8472, 8472, 8472, 8472, 8472],
+        itemStyle: { color: "#E4E70C" },
+      },
+    ],
+  });
+
+  // 重要设备监测情况
+
+  // 火警趋势
+  const lineData2 = reactive({
+    legend: {
+      data: ["真警", "虚警"],
+      right: "10%",
+      textStyle: {
+        color: "#fff",
+      },
+    },
+
+    xAxis: {
+      data: ["05-15", "05-14", "05-13", "05-12", "05-11", "05-10", "05-09"],
+    },
+    yAxis: { min: 0, max: 35 },
+
+    series: [
+      {
+        name: "真警",
+        smooth: true,
+        type: "line",
+        lineStyle: {
+          width: 4,
+          color: "#228efe",
+        },
+        data: [0, 0, 0, 0, 0, 0, 0],
+        itemStyle: { color: "#228efe" },
+      },
+      {
+        name: "虚警",
+        type: "line",
+        smooth: true,
+        lineStyle: {
+          width: 4,
+          color: "#e85c27",
+        },
+        data: [1, 0, 0, 10, 4, 33, 0],
+        itemStyle: { color: "#e85c27" },
+      },
+    ],
+  });
+
+  // 火警来源分析
+  const fireSource = reactive({
+    data: [
+      { value: 1, name: "消防设备预警", itemStyle: { color: "#fd6585" } },
+      { value: 0, name: "监控智能预警", itemStyle: { color: "#51b7ff" } },
+    ],
+  });
+
+  // 设备异常趋势
+  const lineData3 = reactive({
+    legend: {
+      data: ["设备异常", "视频异常", "预警逾期"],
+      right: "10%",
+      textStyle: {
+        color: "#fff",
+      },
+    },
+
+    xAxis: {
+      data: ["05-15", "05-14", "05-13", "05-12", "05-11", "05-10", "05-09"],
+    },
+    yAxis: { min: 0, max: 350 },
+
+    series: [
+      {
+        name: "设备异常",
+        smooth: true,
+        type: "line",
+        lineStyle: {
+          width: 4,
+          color: "#c23531",
+        },
+        data: [2, 0, 0, 24, 9, 50, 0],
+        itemStyle: { color: "#c23531" },
+      },
+      {
+        name: "视频异常",
+        type: "line",
+        smooth: true,
+        lineStyle: {
+          width: 4,
+          color: "#228af7",
+        },
+        data: [69, 291, 299, 294, 249, 266, 91],
+        itemStyle: { color: "#228af7" },
+      },
+      {
+        name: "预警逾期",
+        type: "line",
+        smooth: true,
+        lineStyle: {
+          width: 4,
+          color: "#61a0a8",
+        },
+        data: [0, 0, 0, 10, 6, 4, 0],
+        itemStyle: { color: "#61a0a8" },
+      },
+    ],
+  });
 </script>
 
 <style lang="less" scoped>
@@ -175,11 +360,47 @@
       width: 100%;
       height: 50%;
     }
+
+    .device-map {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.25rem;
+      align-items: center;
+      color: #fff;
+      span {
+        // width: 130px;
+        height: 48px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 48px;
+        display: block;
+        width: 245px;
+        margin-left: -57px;
+        &:first-child {
+          background: url("@/assets/images/hmap_bg.png") no-repeat 0 0;
+        }
+        &:last-child {
+          background: url("@/assets/images/hmap_bg1.png") no-repeat 0 0;
+        }
+      }
+      &-active {
+        width: 300px !important;
+        height: 60px !important;
+        line-height: 60px !important;
+        background: url("@/assets/images/hmap_active_bg.png") no-repeat 0 0 !important;
+      }
+    }
   }
 
   .chart {
     display: flex;
     justify-content: space-between;
+    &-bottom {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .ant-card {
@@ -188,7 +409,7 @@
     padding: 4px;
     overflow: hidden;
     background: url("@/assets/images/cardBg.png") 0 0 / 100% 100% no-repeat;
-    cursor: pointer;
+    // cursor: pointer;
     border-radius: 4px;
     z-index: 9;
 

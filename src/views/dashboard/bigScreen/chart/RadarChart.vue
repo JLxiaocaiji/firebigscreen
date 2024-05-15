@@ -8,10 +8,6 @@
 
   const radar = ref<HTMLDivElement>();
 
-  const props = defineProps({
-    data: { type: Object, default: () => {} },
-  });
-
   const initChart = () => {
     let chart = echarts.init(radar.value);
 
@@ -22,42 +18,32 @@
       tooltip: {},
       // 工具栏
       toolbox: {},
-      // x 轴
-      xAxis: {
-        type: "category",
-        axisLabel: {
-          inside: false,
-          rotate: 45,
-          textStyle: {
-            color: "#77a0c8",
-          },
-        },
-        data: ["2024-05-08", "2024-05-09", "2024-05-10", "2024-05-11", "2024-05-12", "2024-05-13", "2024-05-14"],
-      },
-      yAxis: {
-        min: 0,
-        max: 70000,
+      //   雷达图坐标系
+      radar: {
+        // 雷达图指示器
+        indicator: [
+          { name: "火灾报警", max: 60000 },
+          { name: "电气火灾监控", max: 100 },
+          { name: "独立式火灾探测器", max: 300 },
+          { name: "消防供水", max: 1000 },
+        ],
       },
       series: [
         {
-          name: "设备总数",
+          name: "重要设备监测情况",
           type: "radar",
-          data: [61176, 61176, 61176, 61176, 61176, 61176, 61176],
-        },
-        {
-          name: "被监听设备总数",
-          type: "radar",
-          data: [18561, 18561, 18561, 18561, 18561, 18561, 18561],
-        },
-        {
-          name: "在线设备数",
-          type: "radar",
-          data: [61273, 61273, 61273, 61273, 61273, 61273, 61273],
-        },
-        {
-          name: "异常设备数",
-          type: "radar",
-          data: [8472, 8472, 8472, 8472, 8472, 8472, 8472],
+          lineStyle: {
+            color: "#0698e7",
+          },
+          itemStyle: {
+            color: "#0698e7",
+          },
+          data: [
+            {
+              value: [56135, 51, 221, 822],
+              name: "重要设备监测情况",
+            },
+          ],
         },
       ],
     });
