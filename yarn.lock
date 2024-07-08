@@ -12,6 +12,11 @@
   "resolved" "https://registry.npmjs.org/@amap/amap-jsapi-loader/-/amap-jsapi-loader-1.0.1.tgz"
   "version" "1.0.1"
 
+"@amap/amap-jsapi-types@^0.0.15":
+  "integrity" "sha512-oqyRqHpVDZh5bUe2mAJh41ZsziSj0eUzwcfIbiaBNB0eiTJnZNhKsTdk77VOklOjwuwNfsblpKW9LjmWNpeQ7A=="
+  "resolved" "https://registry.npmjs.org/@amap/amap-jsapi-types/-/amap-jsapi-types-0.0.15.tgz"
+  "version" "0.0.15"
+
 "@ampproject/remapping@^2.2.0", "@ampproject/remapping@^2.3.0":
   "integrity" "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="
   "resolved" "https://r.cnpmjs.org/@ampproject/remapping/-/remapping-2.3.0.tgz"

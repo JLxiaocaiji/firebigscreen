@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script lang="ts" setup name="Header">
+<script lang="ts" setup>
   import { UserOutlined } from "@ant-design/icons-vue";
   import ButtonItem from "./buttonItem.vue";
   import { list1, list2 } from "./index";
@@ -24,6 +24,7 @@
 <style lang="less" scoped>
   .h-left {
     margin-left: 45px;
+    // height: 200px;
   }
 
   .h-right {
