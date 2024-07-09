@@ -2,9 +2,9 @@
 <template>
   <div>
     <a-layout>
-      <a-layout-header class="h">
-        <!-- <Header /> -->
-      </a-layout-header>
+      <!-- <a-layout-header class="h">
+        <Header />
+      </a-layout-header> -->
       <a-layout-content class="c">
         <ContentHeader class="c-home-content" @change-com="(i) => (cardIndex = i)" />
         <ConditionChoose @change="select" v-if="cardIndex == 0" />

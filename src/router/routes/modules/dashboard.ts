@@ -35,6 +35,7 @@ const dashboard: AppRouteModule = {
       path: "bigScreen",
       name: "BigScreen",
       component: () => import("/@/views/dashboard/bigScreen/index.vue"),
+      redirect: "/dashboard/bigScreen/homePage",
       meta: {
         hideChildrenInMenu: false,
         icon: "simple-icons:about-dot-me",
@@ -47,7 +48,6 @@ const dashboard: AppRouteModule = {
           component: () => import("/@/views/dashboard/bigScreen/homePage/index.vue"),
           meta: {
             title: t("routes.dashboard.about"),
-            icon: "simple-icons:about-dot-me",
             hideMenu: true,
           },
         },

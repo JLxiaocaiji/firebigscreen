@@ -2,17 +2,10 @@
 <template>
   <div>
     <a-layout>
-      <a-layout-header class="h">
-        <Header />
-      </a-layout-header>
-      <a-layout-content class="c">
-        <router-view v-slot="{ Component }">
-          <!-- 使用任何自定义过渡和回退到 `fade` -->
-          <transition name="fade">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-      </a-layout-content>
+      <a-layout-header class="h"> <Header />1111 </a-layout-header>
+      <!-- <a-layout-content class="c"> -->
+      <router-view />
+      <!-- </a-layout-content> -->
     </a-layout>
   </div>
 </template>

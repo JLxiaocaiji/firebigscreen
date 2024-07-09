@@ -10,13 +10,18 @@
   import { HeaderItem } from "./index.d";
   // 在用运行时 props 声明时给一个 prop 标注更复杂的类型定义
   import type { PropType } from "vue";
+  import { router } from "/@/router";
 
   defineProps({
     itemList: { type: Array as PropType<HeaderItem[]>, default: () => [] },
   });
 
-  const routerJump = () => {
-    console.log(1);
+  const routerJump = (e) => {
+    // router.push({
+    //   path: "bigScreen/homePage",
+    //   // query: { },
+    // });
+    console.log(e);
   };
 </script>
 
