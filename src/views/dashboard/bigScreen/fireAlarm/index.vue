@@ -34,23 +34,18 @@
                 <a-button type="primary">
                   <SearchOutlined />
                 </a-button>
-                <a-button type="primary"
-                  ><template #icon>
-                    <SearchOutlined />
-                  </template>
-                  导出</a-button
-                >
+                <a-button type="primary">导出</a-button>
               </a-space>
             </a-form-item>
           </a-col>
         </a-row>
       </a-form>
+
+      <div class="table">
+        <a-table :columns="columns" :data-source="data" />
+      </div>
     </a-col>
   </a-row>
-
-  <div class="table">
-    <a-table />
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -110,6 +105,28 @@
     { label: "已处理", value: 1 },
     { label: "未处理", value: 0 },
   ];
+
+  // table
+  const columns = [
+    {
+      name: "index",
+      dataIndex: "index",
+      key: "index",
+      customRender: ({ text, record, index, column }) => {
+        return index + 1;
+      },
+    },
+  ];
+
+  const data = [
+    {
+      key: "1",
+      name: "John Brown",
+      age: 32,
+      address: "New York No. 1 Lake Park",
+      tags: ["nice", "developer"],
+    },
+  ];
 </script>
 
 <style lang="less" scoped>
@@ -156,8 +173,10 @@
         vertical-align: top;
         .ant-form-item {
           margin-bottom: 22px;
-          .ant-form-label {
-            color: #b3e4fe !important;
+          :deep(&-label) {
+            label {
+              color: #b3e4fe !important;
+            }
           }
         }
       }
