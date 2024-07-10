@@ -14,7 +14,7 @@
 
 "@amap/amap-jsapi-types@^0.0.15":
   "integrity" "sha512-oqyRqHpVDZh5bUe2mAJh41ZsziSj0eUzwcfIbiaBNB0eiTJnZNhKsTdk77VOklOjwuwNfsblpKW9LjmWNpeQ7A=="
-  "resolved" "https://registry.npmjs.org/@amap/amap-jsapi-types/-/amap-jsapi-types-0.0.15.tgz"
+  "resolved" "https://registry.npmmirror.com/@amap/amap-jsapi-types/-/amap-jsapi-types-0.0.15.tgz"
   "version" "0.0.15"
 
 "@ampproject/remapping@^2.2.0", "@ampproject/remapping@^2.3.0":

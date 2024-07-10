@@ -32,13 +32,11 @@
             <a-form-item>
               <a-space>
                 <a-button type="primary">
-                  <template #icon>
-                    <SearchOutlined />
-                  </template>
+                  <SearchOutlined />
                 </a-button>
                 <a-button type="primary"
                   ><template #icon>
-                    <DownloadOutlined />
+                    <SearchOutlined />
                   </template>
                   导出</a-button
                 >
@@ -49,13 +47,17 @@
       </a-form>
     </a-col>
   </a-row>
+
+  <div class="table">
+    <a-table />
+  </div>
 </template>
 
 <script lang="ts" setup>
   import { reactive, ref, computed, watch, h } from "vue";
   import type { UnwrapRef } from "vue";
   import type { FormActionType } from "@/components/Form";
-  import { SearchOutlined, DownloadOutlined } from "@ant-design/icons-vue";
+  import { SearchOutlined } from "@ant-design/icons-vue";
   import { isArray } from "@/utils/is";
 
   const state = reactive({
@@ -145,16 +147,27 @@
     width: 80.72vw;
     margin-top: 2vh;
     padding-top: 32px;
-
     .form {
       overflow: hidden;
       margin: 0 2%;
       margin-top: 20px;
-
       .ant-col {
         margin-right: 10px;
         vertical-align: top;
+        .ant-form-item {
+          margin-bottom: 22px;
+          .ant-form-label {
+            color: #b3e4fe !important;
+          }
+        }
       }
+    }
+
+    .table {
+      margin: 0 2%;
+      height: 86%;
+      overflow-y: scroll;
+      padding-bottom: 15px;
     }
   }
 </style>
