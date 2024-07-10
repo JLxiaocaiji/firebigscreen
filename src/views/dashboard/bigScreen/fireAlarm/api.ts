@@ -6,14 +6,14 @@ enum Api {
 }
 
 /**
- * list
+ * 大屏火警事件列表
  * @param params
  * @returns
  */
 export const list = (params) => defHttp.get({ url: Api.list, params });
 
 /**
- * detail
+ * 火警预警（档案)-通过id查询（任务详情）
  * @param params
  * @returns
  */

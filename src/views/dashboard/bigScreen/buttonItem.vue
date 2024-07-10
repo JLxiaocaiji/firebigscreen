@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <li v-for="item in itemList" :key="item.label" class="item" @click="routerJump">{{ item.label }}</li>
+      <li v-for="item in itemList" :key="item.label" class="item" @click="routerJump(item.url)">{{ item.label }}</li>
     </ul>
   </div>
 </template>
@@ -16,12 +16,12 @@
     itemList: { type: Array as PropType<HeaderItem[]>, default: () => [] },
   });
 
-  const routerJump = (e) => {
-    // router.push({
-    //   path: "bigScreen/homePage",
-    //   // query: { },
-    // });
-    console.log(e);
+  const routerJump = (path: string) => {
+    console.log(path);
+    router.push({
+      path: path,
+      // query: { },
+    });
   };
 </script>
 
