@@ -1,5 +1,5 @@
 <template>
-  <a-row style="height: 100%">
+  <a-row style="height: 100%; background: url(../../../../assets/images/bigscreen/bg.png) 0% 0% / 100% 100% no-repeat">
     <a-col :span="4" class="left-tab">
       <a-menu
         v-model:openKeys="state.openKeys"
@@ -20,18 +20,18 @@
           </a-col>
           <a-col :span="11">
             <a-form-item label="单位名称" name="unitId">
-              <a-select v-model:value="formState.unitId" :options="unitOptions" placeholder="请选择" />
+              <a-select v-model:value="formState.unitId" :options="[]" />
             </a-form-item>
           </a-col>
           <a-col :span="11">
-            <a-form-item label="火警状态" name="status">
-              <a-select v-model:value="formState.status" :options="fireStateOptions" placeholder="请选择" />
+            <a-form-item label="火警状态" name="">
+              <a-select v-model:value="formState.fireAlarmType" :options="fireStateOptions" />
             </a-form-item>
           </a-col>
           <a-col :span="8">
             <a-form-item>
               <a-space>
-                <a-button type="primary" @click="search">
+                <a-button type="primary">
                   <SearchOutlined />
                 </a-button>
                 <a-button type="primary">导出</a-button>
@@ -42,32 +42,44 @@
       </a-form>
 
       <div class="table">
-        <a-table :columns="columns" :data-source="dataSource" bordered>
-          <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex == 'status'">
-              <span :style="{ color: record.status == '0' ? 'red' : record.status == '1' ? 'green' : '' }">{{
-                record.status == "0" ? "待处理" : record.status == "1" ? "已处理" : ""
-              }}</span>
-            </template>
-
-            <template v-else-if="column.dataIndex == 'relatedValue'">
-              <img :src="camera" />
-            </template>
-
-            <template v-else-if="column.dataIndex == 'action'">
-              <a style="color: #fff"> 详情 </a>
-            </template>
+        <!-- <BasicTable
+          ref="tableRef"
+          :canResize="true"
+          :bordered="true"
+          :loading="loading"
+          :columns="columns"
+          :showIndexColumn="false"
+          :dataSource="dataSource"
+          :pagination="pagination"
+        >
+          <template #tableTitle></template>
+          <template #img="{ text }">
+            <a-image :width="60" :src="text" />
           </template>
-        </a-table>
+          <template #action="{ record }">
+            <TableAction :actions="getTableAction(record)" />
+          </template>
+        </BasicTable> -->
 
-        <a-pagination v-model:current="pagination.pageNo" show-quick-jumper :total="pagination.total" @change="search" />
+        <BasicTable @register="registerTable" :rowSelection="rowSelection">
+          <template #tableTop><span></span></template>
+          <template #toolbar><span></span></template>
+          <template #img="{ text }">
+            <a-image :width="60" :src="text" />
+          </template>
+          <template #action="{ record }">
+            <TableAction :actions="getTableAction(record)" />
+          </template>
+        </BasicTable>
+
+        
       </div>
     </a-col>
   </a-row>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, computed, watch, h, onBeforeMount } from "vue";
+  import { reactive, ref, computed, watch, h } from "vue";
   import type { UnwrapRef } from "vue";
   import type { FormActionType } from "@/components/Form";
   import { SearchOutlined } from "@ant-design/icons-vue";
@@ -75,9 +87,7 @@
   import { BasicTable, TableAction, ActionItem } from "/@/components/Table";
   import { columns } from "./data";
   import { useListPage } from "/@/hooks/system/useListPage";
-  import { list, unitList } from "./api";
-
-  import  camera  from "@/assets/images/bigscreen/camera.png"
+  import { list } from "./api";
 
   const state = reactive({
     collapsed: false,
@@ -94,25 +104,12 @@
     },
   ]);
 
-  /**
-   * form
-   *
-   */
+  // form
   const formRef = ref<Nullable<FormActionType>>(null);
-  const formState: UnwrapRef<Record<string, string | number | string[]>> = reactive({
-    startAndEndTime: [],
+  const formState: UnwrapRef<Record<string, string | number>> = reactive({
+    startAndEndTime: "",
     unitId: "",
-    status: "",
-  });
-
-  const unitOptions = ref<Record<string, any>>([]);
-
-  onBeforeMount(async () => {
-    unitOptions.value = (await unitList()).map((item) => {
-      return { label: item.unitName, value: item.id.toString() };
-    });
-
-    search();
+    fireAlarmType: "",
   });
 
   // 开始、结束时间
@@ -146,10 +143,30 @@
   /**
    * table
    */
+  // 列表页面公共参数、方法
+  const { tableContext } = useListPage({
+    tableProps: {
+      api: list,
+      rowKey: "id",
+      columns: columns,
+      useSearchForm: false,
+      canResize: true,
+      actionColumn: {
+        width: 100,
+        title: "详情",
+        dataIndex: "action",
+        fixed: "right",
+        slots: { customRender: "action" },
+      },
+    },
+  });
+  //注册table数据
+  const [registerTable, { reload }, { rowSelection }] = tableContext;
+
   const loading = ref<boolean>(false);
-  const dataSource = ref<Record<string, any>[]>([]);
+  const dataSource = reactive<Record<string, any>[]>([]);
   const pagination = reactive({
-    pageNo: 1,
+    current: 1,
     pageSize: 10,
     pageSizeOptions: ["10", "20", "30", "100", "200"],
     total: 0,
@@ -159,44 +176,30 @@
     console.log("checkedKeys------>", checkedKeys);
     checkedKeys.value = selectedRowKeys;
   };
-
-  const search = async () => {
-    let obj = {
-      startTime: startTime.value,
-      endTime: endTime.value,
-      unitId: formState.unitId,
-      status: formState.status,
-      pageNo: pagination.pageNo,
-      pageSize: pagination.pageSize,
-    };
-    dataSource.value = (await list(obj))?.records;
-    pagination.total = dataSource.value.length;
-  };
-
   // 选择列配置
-  //   const rowSelection = {
-  //     type: "checkbox",
-  //     columnWidth: 30,
-  //     selectedRowKeys: checkedKeys,
-  //     onChange: onSelectChange,
-  //   };
+//   const rowSelection = {
+//     type: "checkbox",
+//     columnWidth: 30,
+//     selectedRowKeys: checkedKeys,
+//     onChange: onSelectChange,
+//   };
 
   // 操作栏
+  const getTableAction = (record): ActionItem[] => {
+    return [
+      {
+        label: "详情",
+        onClick: handleDetail.bind(null, record),
+      },
+    ];
+  };
+  // 详情
+  async function handleDetail(record: Recordable) {
+    console.log(record);
+  }
 </script>
 
 <style lang="less" scoped>
-  .ant-row {
-    background: url(/@/assets/images/bigscreen/bg.png) 0% 0% / 100% 100% no-repeat;
-  }
-
-  .form-item-style {
-    background-image: none;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
-    color: #fff;
-    // background: transparent;
-  }
-
   .left-tab {
     background: url(/@/assets/images/bigscreen/left-tab.png) no-repeat;
     background-size: 100% 100%;
@@ -245,32 +248,12 @@
               color: #b3e4fe;
             }
           }
-          :deep(.ant-picker):extend(.form-item-style) {
-          }
-          :deep(.ant-select-selector):extend(.form-item-style) {
-            .ant-select-selection-item {
-              color: #fff;
-            }
-          }
         }
       }
     }
 
     .table {
-      width: 100%;
-      color: #fff;
-      background: rgba(28, 95, 176, 0.2);
-
-      .ant-table {
-        .ant-table-container {
-          .ant-table-thead {
-            .ant-table-cell {
-              background: #135ba4;
-              color: #4fb9f3;
-            }
-          }
-        }
-      }
+        width: 100%;
     }
   }
 </style>

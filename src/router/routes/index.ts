@@ -10,9 +10,6 @@ const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
 
 const routeModuleList: AppRouteModule[] = [];
 
-console.log(111111);
-console.log(modules);
-
 // 加入到路由集合中
 Object.keys(modules).forEach((key) => {
   const mod = (modules as Recordable)[key].default || {};
