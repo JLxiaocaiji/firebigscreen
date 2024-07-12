@@ -43,8 +43,9 @@ export const columns: BasicColumn[] = [
     customRender: ({ text, record, index, column }) => {
       return index + 1;
     },
+    slots: { customRender: "ellipsisText" },
   },
-  { title: "单位名称", dataIndex: "unitName", width: 100, align: "center" },
+  { title: "单位名称", dataIndex: "unitName", width: 100, align: "center", slots: { customRender: "ellipsisText" } },
   {
     title: "火警状态",
     dataIndex: "status",
@@ -55,9 +56,9 @@ export const columns: BasicColumn[] = [
 
     // },
   },
-  { title: "设备名称", dataIndex: "deviceName", width: 100, align: "center" },
+  { title: "设备名称", dataIndex: "deviceName", width: 100, align: "center", slots: { customRender: "ellipsisText" } },
   { title: "设备位置", dataIndex: "address", width: 100, align: "center" },
-  { title: "发生时间", dataIndex: "time", width: 100, align: "center" },
+  { title: "发生时间", dataIndex: "time", width: 100, align: "center", slots: { customRender: "ellipsisText" } },
   { title: "预警次数", dataIndex: "warning_num", width: 100, align: "center" },
   { title: "关联视频", dataIndex: "relatedValue", width: 100, align: "center", slots: { customRender: "img" } },
   { title: "详情", dataIndex: "action", width: 100, align: "center" },

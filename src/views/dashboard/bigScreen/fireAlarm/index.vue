@@ -11,27 +11,27 @@
       />
     </a-col>
     <a-col :span="18" class="right-tab">
-      <a-form ref="formRef" class="form" layout="inline" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+      <a-form ref="formRef" class="form" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
         <a-row>
-          <a-col :span="11">
+          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
             <a-form-item label="发生时间" name="startAndEndTime">
               <a-range-picker v-model:value="formState.startAndEndTime" format="YYYY/MM/DD HH:mm:ss" />
             </a-form-item>
           </a-col>
-          <a-col :span="11">
+          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
             <a-form-item label="单位名称" name="unitId">
-              <a-select v-model:value="formState.unitId" :options="unitOptions" placeholder="请选择" />
+              <a-select v-model:value="formState.unitId" :options="unitOptions" placeholder="请选择" allowClear />
             </a-form-item>
           </a-col>
-          <a-col :span="11">
+          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
             <a-form-item label="火警状态" name="status">
-              <a-select v-model:value="formState.status" :options="fireStateOptions" placeholder="请选择" />
+              <a-select v-model:value="formState.status" :options="fireStateOptions" placeholder="请选择" allowClear />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
             <a-form-item>
               <a-space>
-                <a-button type="primary" @click="search">
+                <a-button type="primary" @click="search" style="margin-left: 50px">
                   <SearchOutlined />
                 </a-button>
                 <a-button type="primary">导出</a-button>
@@ -42,7 +42,7 @@
       </a-form>
 
       <div class="table">
-        <a-table :columns="columns" :data-source="dataSource" bordered>
+        <a-table :columns="columns" :data-source="dataSource" :pagination="pagination">
           <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex == 'status'">
               <span :style="{ color: record.status == '0' ? 'red' : record.status == '1' ? 'green' : '' }">{{
@@ -50,17 +50,26 @@
               }}</span>
             </template>
 
-            <template v-else-if="column.dataIndex == 'relatedValue'">
-              <img :src="camera" />
-            </template>
+            <!-- <template v-else-if="column.dataIndex == 'relatedValue'">
+              <a-image :width="10" :src="camera" />
+              <a>111</a>
+            </template> -->
 
             <template v-else-if="column.dataIndex == 'action'">
               <a style="color: #fff"> 详情 </a>
             </template>
           </template>
+
+          <template #ellipsisText="{ text }">
+            <JEllipsis :value="text" :length="8" />
+          </template>
+
+          <template #img="{ text }">
+            <a-image :width="60" :src="camera" />
+          </template>
         </a-table>
 
-        <a-pagination v-model:current="pagination.pageNo" show-quick-jumper :total="pagination.total" @change="search" />
+        <!-- <a-pagination v-model:current="pagination.pageNo" show-quick-jumper :total="pagination.total" @change="search" /> -->
       </div>
     </a-col>
   </a-row>
@@ -73,11 +82,12 @@
   import { SearchOutlined } from "@ant-design/icons-vue";
   import { isArray } from "@/utils/is";
   import { BasicTable, TableAction, ActionItem } from "/@/components/Table";
+  import JEllipsis from "/@/components/Form/src/jeecg/components/JEllipsis.vue";
   import { columns } from "./data";
   import { useListPage } from "/@/hooks/system/useListPage";
   import { list, unitList } from "./api";
-
-  import  camera  from "@/assets/images/bigscreen/camera.png"
+  import camera from "@/assets/images/bigscreen/camera.png";
+  import { custom } from "vue-types";
 
   const state = reactive({
     collapsed: false,
@@ -99,10 +109,10 @@
    *
    */
   const formRef = ref<Nullable<FormActionType>>(null);
-  const formState: UnwrapRef<Record<string, string | number | string[]>> = reactive({
+  const formState: UnwrapRef<Record<string, string | number | undefined | string[]>> = reactive({
     startAndEndTime: [],
-    unitId: "",
-    status: "",
+    unitId: undefined,
+    status: undefined,
   });
 
   const unitOptions = ref<Record<string, any>>([]);
@@ -194,7 +204,7 @@
     border-radius: 4px;
     border: 1px solid #dcdfe6;
     color: #fff;
-    // background: transparent;
+    background: rgb(10, 50, 112);
   }
 
   .left-tab {
@@ -236,7 +246,7 @@
       margin: 0 2%;
       margin-top: 20px;
       .ant-col {
-        margin-right: 10px;
+        // margin-right: 10px;
         vertical-align: top;
         .ant-form-item {
           margin-bottom: 22px;
@@ -246,11 +256,28 @@
             }
           }
           :deep(.ant-picker):extend(.form-item-style) {
-          }
-          :deep(.ant-select-selector):extend(.form-item-style) {
-            .ant-select-selection-item {
+            .ant-picker-input {
+              input {
+                color: #fff;
+                &::placeholder {
+                  color: #fff;
+                }
+              }
+            }
+            .ant-picker-separator {
               color: #fff;
             }
+            .ant-picker-suffix {
+              color: #fff;
+            }
+          }
+          :deep(.ant-select-selector):extend(.form-item-style) {
+            .ant-select-selection-item, .ant-select-selection-placeholder {
+              color: #fff;
+            }
+          }
+          :deep(.ant-select-arrow) {
+            color: #fff !important;
           }
         }
       }
@@ -258,19 +285,44 @@
 
     .table {
       width: 100%;
-      color: #fff;
-      background: rgba(28, 95, 176, 0.2);
-
-      .ant-table {
+      :deep(.ant-table) {
+        background: transparent;
         .ant-table-container {
           .ant-table-thead {
-            .ant-table-cell {
+            th {
               background: #135ba4;
               color: #4fb9f3;
+              border-bottom: unset;
+              &:before {
+                background-color: unset !important;
+              }
+            }
+          }
+          .ant-table-tbody {
+            color: #fff;
+            td {
+              border-top: unset;
+              border-bottom: unset;
+            }
+            .ant-table-cell-row-hover {
+              color: unset;
+              background-color: unset;
+              //   background: transparent;
+              transition: unset;
+              background: unset;
             }
           }
         }
       }
     }
+  }
+
+  :deep(.ant-table-tbody) > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+    background: unset;
+    transition: unset;
+  }
+
+  :deep(.ant-table-pagination-right) {
+    justify-content: center;
   }
 </style>
