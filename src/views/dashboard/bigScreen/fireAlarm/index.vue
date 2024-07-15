@@ -50,11 +50,6 @@
               }}</span>
             </template>
 
-            <!-- <template v-else-if="column.dataIndex == 'relatedValue'">
-              <a-image :width="10" :src="camera" />
-              <a>111</a>
-            </template> -->
-
             <template v-else-if="column.dataIndex == 'action'">
               <a style="color: #fff"> 详情 </a>
             </template>
@@ -64,8 +59,23 @@
             <JEllipsis :value="text" :length="8" />
           </template>
 
-          <template #img="{ text }">
-            <a-image :width="60" :src="camera" />
+          <template #img="{ text, column, record, index }">
+            <img
+              style="width: 30px; height: 30px"
+              src="../../../../assets/images/bigscreen/camera.png"
+              @click="
+                () => {
+                  open = true;
+                  console.log(text);
+                  console.log(column);
+                  console.log(record);
+                  console.log(index);
+
+                  title = record.unitName;
+                  open = true;
+                }
+              "
+            />
           </template>
         </a-table>
 
@@ -73,6 +83,8 @@
       </div>
     </a-col>
   </a-row>
+
+  <Modal v-model:open="open" v-model:title="title" />
 </template>
 
 <script lang="ts" setup>
@@ -84,10 +96,8 @@
   import { BasicTable, TableAction, ActionItem } from "/@/components/Table";
   import JEllipsis from "/@/components/Form/src/jeecg/components/JEllipsis.vue";
   import { columns } from "./data";
-  import { useListPage } from "/@/hooks/system/useListPage";
   import { list, unitList } from "./api";
-  import camera from "@/assets/images/bigscreen/camera.png";
-  import { custom } from "vue-types";
+  import Modal from "./Modal.vue";
 
   const state = reactive({
     collapsed: false,
@@ -191,6 +201,10 @@
   //     onChange: onSelectChange,
   //   };
 
+  // 视频列
+  const open = ref<boolean>(false);
+  const title = ref<string>("");
+
   // 操作栏
 </script>
 
@@ -272,7 +286,8 @@
             }
           }
           :deep(.ant-select-selector):extend(.form-item-style) {
-            .ant-select-selection-item, .ant-select-selection-placeholder {
+            .ant-select-selection-item,
+            .ant-select-selection-placeholder {
               color: #fff;
             }
           }
