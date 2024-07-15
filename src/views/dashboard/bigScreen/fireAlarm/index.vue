@@ -1,90 +1,92 @@
 <template>
-  <a-row style="height: 100%">
-    <a-col :span="4" class="left-tab">
-      <a-menu
-        v-model:openKeys="state.openKeys"
-        v-model:selectedKeys="state.selectedKeys"
-        mode="inline"
-        theme="dark"
-        :inline-collapsed="state.collapsed"
-        :items="items"
-      />
-    </a-col>
-    <a-col :span="18" class="right-tab">
-      <a-form ref="formRef" class="form" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
-        <a-row>
-          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
-            <a-form-item label="发生时间" name="startAndEndTime">
-              <a-range-picker v-model:value="formState.startAndEndTime" format="YYYY/MM/DD HH:mm:ss" />
-            </a-form-item>
-          </a-col>
-          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
-            <a-form-item label="单位名称" name="unitId">
-              <a-select v-model:value="formState.unitId" :options="unitOptions" placeholder="请选择" allowClear />
-            </a-form-item>
-          </a-col>
-          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
-            <a-form-item label="火警状态" name="status">
-              <a-select v-model:value="formState.status" :options="fireStateOptions" placeholder="请选择" allowClear />
-            </a-form-item>
-          </a-col>
-          <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
-            <a-form-item>
-              <a-space>
-                <a-button type="primary" @click="search" style="margin-left: 50px">
-                  <SearchOutlined />
-                </a-button>
-                <a-button type="primary">导出</a-button>
-              </a-space>
-            </a-form-item>
-          </a-col>
-        </a-row>
-      </a-form>
+  <div class="bg">
+    <a-row style="height: 100%">
+      <a-col :span="4" class="left-tab">
+        <a-menu
+          v-model:openKeys="state.openKeys"
+          v-model:selectedKeys="state.selectedKeys"
+          mode="inline"
+          theme="dark"
+          :inline-collapsed="state.collapsed"
+          :items="items"
+        />
+      </a-col>
+      <a-col :span="18" class="right-tab">
+        <a-form ref="formRef" class="form" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+          <a-row>
+            <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
+              <a-form-item label="发生时间" name="startAndEndTime">
+                <a-range-picker v-model:value="formState.startAndEndTime" format="YYYY/MM/DD HH:mm:ss" />
+              </a-form-item>
+            </a-col>
+            <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
+              <a-form-item label="单位名称" name="unitId">
+                <a-select v-model:value="formState.unitId" :options="unitOptions" placeholder="请选择" allowClear />
+              </a-form-item>
+            </a-col>
+            <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
+              <a-form-item label="火警状态" name="status">
+                <a-select v-model:value="formState.status" :options="fireStateOptions" placeholder="请选择" allowClear />
+              </a-form-item>
+            </a-col>
+            <a-col :xs="{ span: 8 }" :md="{ span: 6 }" :lg="{ span: 6 }">
+              <a-form-item>
+                <a-space>
+                  <a-button type="primary" @click="search" style="margin-left: 50px">
+                    <SearchOutlined />
+                  </a-button>
+                  <a-button type="primary">导出</a-button>
+                </a-space>
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </a-form>
 
-      <div class="table">
-        <a-table :columns="columns" :data-source="dataSource" :pagination="pagination">
-          <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex == 'status'">
-              <span :style="{ color: record.status == '0' ? 'red' : record.status == '1' ? 'green' : '' }">{{
-                record.status == "0" ? "待处理" : record.status == "1" ? "已处理" : ""
-              }}</span>
+        <div class="table">
+          <a-table :columns="columns" :data-source="dataSource" :pagination="pagination">
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.dataIndex == 'status'">
+                <span :style="{ color: record.status == '0' ? 'red' : record.status == '1' ? 'green' : '' }">{{
+                  record.status == "0" ? "待处理" : record.status == "1" ? "已处理" : ""
+                }}</span>
+              </template>
+
+              <template v-else-if="column.dataIndex == 'action'">
+                <a style="color: #fff"> 详情 </a>
+              </template>
             </template>
 
-            <template v-else-if="column.dataIndex == 'action'">
-              <a style="color: #fff"> 详情 </a>
+            <template #ellipsisText="{ text }">
+              <JEllipsis :value="text" :length="8" />
             </template>
-          </template>
 
-          <template #ellipsisText="{ text }">
-            <JEllipsis :value="text" :length="8" />
-          </template>
+            <template #img="{ text, column, record, index }">
+              <img
+                style="width: 30px; height: 30px"
+                src="../../../../assets/images/bigscreen/camera.png"
+                @click="
+                  () => {
+                    open = true;
+                    console.log(text);
+                    console.log(column);
+                    console.log(record);
+                    console.log(index);
+                    open = true;
+                    cameraId = record.cameraId;
+                    title = record.unitName;
+                  }
+                "
+              />
+            </template>
+          </a-table>
 
-          <template #img="{ text, column, record, index }">
-            <img
-              style="width: 30px; height: 30px"
-              src="../../../../assets/images/bigscreen/camera.png"
-              @click="
-                () => {
-                  open = true;
-                  console.log(text);
-                  console.log(column);
-                  console.log(record);
-                  console.log(index);
+          <!-- <a-pagination v-model:current="pagination.pageNo" show-quick-jumper :total="pagination.total" @change="search" /> -->
+        </div>
+      </a-col>
+    </a-row>
+  </div>
 
-                  title = record.unitName;
-                  open = true;
-                }
-              "
-            />
-          </template>
-        </a-table>
-
-        <!-- <a-pagination v-model:current="pagination.pageNo" show-quick-jumper :total="pagination.total" @change="search" /> -->
-      </div>
-    </a-col>
-  </a-row>
-
-  <Modal v-model:open="open" v-model:title="title" />
+  <Modal v-model:open="open" :title="title" :cameraId="cameraId" />
 </template>
 
 <script lang="ts" setup>
@@ -204,13 +206,18 @@
   // 视频列
   const open = ref<boolean>(false);
   const title = ref<string>("");
+  const cameraId = ref<string>("");
 
   // 操作栏
 </script>
 
 <style lang="less" scoped>
-  .ant-row {
+  .bg {
     background: url(/@/assets/images/bigscreen/bg.png) 0% 0% / 100% 100% no-repeat;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-top: 90px;
   }
 
   .form-item-style {

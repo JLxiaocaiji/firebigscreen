@@ -49,6 +49,7 @@
     "emoji-mart-vue-fast": "^15.0.0",
     "enquire.js": "^2.1.6",
     "event-source-polyfill": "^1.0.31",
+    "ezuikit-js": "^8.0.5",
     "highlight.js": "^11.9.0",
     "intro.js": "^7.2.0",
     "lodash-es": "^4.17.21",

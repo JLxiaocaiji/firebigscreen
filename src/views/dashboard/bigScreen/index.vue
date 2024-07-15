@@ -2,7 +2,7 @@
 <template>
   <div>
     <a-layout>
-      <a-layout-header class="h"> <Header />1111 </a-layout-header>
+      <a-layout-header class="h"> <Header /></a-layout-header>
       <!-- <a-layout-content class="c"> -->
       <router-view />
       <!-- </a-layout-content> -->

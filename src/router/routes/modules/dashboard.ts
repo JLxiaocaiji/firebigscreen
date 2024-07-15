@@ -31,28 +31,6 @@ const dashboard: AppRouteModule = {
         title: t("routes.dashboard.workbench"),
       },
     },
-    {
-      path: "bigScreen",
-      name: "BigScreen",
-      component: () => import("/@/views/dashboard/bigScreen/index.vue"),
-      redirect: "/dashboard/bigScreen/homePage",
-      meta: {
-        hideChildrenInMenu: false,
-        icon: "simple-icons:about-dot-me",
-        title: t("routes.dashboard.about"),
-      },
-      children: [
-        {
-          path: "homePage",
-          name: "HomePage",
-          component: () => import("/@/views/dashboard/bigScreen/homePage/index.vue"),
-          meta: {
-            title: t("routes.dashboard.about"),
-            hideMenu: true,
-          },
-        },
-      ],
-    },
   ],
 };
 
