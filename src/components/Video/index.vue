@@ -5,32 +5,36 @@
     <span
       v-if="isPlay"
       @click="
-        isPlay = true;
-        player.play();
+        () => {
+          isPlay = false;
+          player.stop();
+        }
       "
       title="开始播放"
-    >
-      <svg t="1567596067868" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1122" width="32" height="32">
-        <path
-          d="M320.552713 167.630858l467.602838 269.970688c57.836243 33.391505 57.836243 116.871801 0 150.263306L320.552713 857.836563c-57.836243 33.391505-130.131803-8.348132-130.131802-75.132165V242.763023c-0.001023-66.784032 72.294536-108.523669 130.131802-75.132165z"
-          fill="#ffffff"
-          p-id="1123"
-        />
-      </svg>
-    </span>
-    <span
-      v-if="!isPlay"
-      @click="
-        isPlay = false;
-        player.stop();
-      "
-      title="结束播放"
     >
       <svg t="1567596200214" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1340" width="32" height="32">
         <path
           d="M884.736 896H139.264c-6.144 0-11.264-5.12-11.264-11.264V139.264c0-6.144 5.12-11.264 11.264-11.264h745.984c6.144 0 11.264 5.12 11.264 11.264v745.984c-0.512 5.632-5.632 10.752-11.776 10.752z"
           p-id="1341"
           fill="red"
+        />
+      </svg>
+    </span>
+    <span
+      v-if="!isPlay"
+      @click="
+        () => {
+          isPlay = true;
+          player.play();
+        }
+      "
+      title="结束播放"
+    >
+      <svg t="1567596067868" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1122" width="32" height="32">
+        <path
+          d="M320.552713 167.630858l467.602838 269.970688c57.836243 33.391505 57.836243 116.871801 0 150.263306L320.552713 857.836563c-57.836243 33.391505-130.131803-8.348132-130.131802-75.132165V242.763023c-0.001023-66.784032 72.294536-108.523669 130.131802-75.132165z"
+          fill="#ffffff"
+          p-id="1123"
         />
       </svg>
     </span>
@@ -45,7 +49,7 @@
       </svg>
     </span>
 
-    <span title="开始录制" v-if="isTranscribe" @click="isTranscribe = false">
+    <span title="开始录制" v-if="isTranscribe" @click="startRecord">
       <svg t="1567596380579" class="icon" viewBox="0 0 1692 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2413" width="32" height="32">
         <path
           d="M1612.554484 866.112901l-227.951822-132.253664c-42.220868-25.596285-75.990132-51.19257-75.990132-93.877812V341.333333c0-42.666667 33.769264-63.990713 75.990132-89.605572l227.951822-132.253664c42.220868-25.596285 75.990132-4.272239 75.990132 38.394427v669.849949c0 46.920331-33.769264 63.990713-75.990132 38.394428z m-590.9807 157.868524H160.438971c-88.65825 0-160.413293-72.516616-160.413293-162.140763V162.140763C0.025678 72.553766 71.780721 0 160.438971 0h861.134813c88.639675 0 160.413293 72.553766 160.413293 162.140763v699.699899c0 89.624147-71.773618 162.140763-160.413293 162.140763zM329.266717 221.859237c-54.870411 8.563053-101.307793 55.483384-113.957336 115.201857-21.101146 102.38514 67.538529 196.262952 173.062836 174.938906 54.888986-12.798143 101.326368-59.718473 113.994486-119.474097 21.101146-106.657379-67.538529-196.262952-173.099986-170.666666z"
@@ -55,7 +59,7 @@
       </svg>
     </span>
 
-    <span title="结束录制" v-if="!isTranscribe" @click="isTranscribe = true">
+    <span title="结束录制" v-if="!isTranscribe" @click="endRecord">
       <svg t="1567596380579" class="icon" viewBox="0 0 1692 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2413" width="32" height="32">
         <path
           d="M1612.554484 866.112901l-227.951822-132.253664c-42.220868-25.596285-75.990132-51.19257-75.990132-93.877812V341.333333c0-42.666667 33.769264-63.990713 75.990132-89.605572l227.951822-132.253664c42.220868-25.596285 75.990132-4.272239 75.990132 38.394427v669.849949c0 46.920331-33.769264 63.990713-75.990132 38.394428z m-590.9807 157.868524H160.438971c-88.65825 0-160.413293-72.516616-160.413293-162.140763V162.140763C0.025678 72.553766 71.780721 0 160.438971 0h861.134813c88.639675 0 160.413293 72.553766 160.413293 162.140763v699.699899c0 89.624147-71.773618 162.140763-160.413293 162.140763zM329.266717 221.859237c-54.870411 8.563053-101.307793 55.483384-113.957336 115.201857-21.101146 102.38514 67.538529 196.262952 173.062836 174.938906 54.888986-12.798143 101.326368-59.718473 113.994486-119.474097 21.101146-106.657379-67.538529-196.262952-173.099986-170.666666z"
@@ -97,17 +101,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="Video">
   import { ref, onMounted, reactive } from "vue";
   import { getUrl, getToken } from "./api";
   import { IPlayer } from "./index";
   import EZUIKit from "ezuikit-js";
-  import { useGlobSetting } from "/@/hooks/setting";
-    import { useMessage } from '/@/hooks/web/useMessage';
+  import { useMessage } from "/@/hooks/web/useMessage";
 
   const { createMessage } = useMessage();
-  const globSetting = useGlobSetting();
-  let baseUrl = globSetting.uploadUrl;
 
   // 播放器
   let player: IPlayer;
@@ -117,16 +118,10 @@
     cameraId: { type: String, required: true },
   });
 
-  // player 基础属性
-  const playBaseConfig = reactive<Record<string, string>>({
-    accessToken: "",
-    url: "",
-  });
-
   // 播放/暂停
-  const isPlay = ref<boolean>(true);
+  const isPlay = ref<boolean>(false);
   // 开始/结束 录制
-  const isTranscribe = ref<boolean>(false);
+  const isTranscribe = ref<boolean>(true);
 
   onMounted(() => {
     (window as any).player = player;
@@ -141,44 +136,35 @@
     player = null!;
   };
 
-  // 获取萤石云视频播放Url
-  const initUrl = async () => {
-    console.log(1111);
-    console.log(props.cameraId);
-
-    playBaseConfig.url = await getUrl({ cameraId: props.cameraId });
-    console.log(playBaseConfig);
-  };
-
   const init = () => {
     if (player) {
       destroy();
     }
 
-    if (props.cameraId) {
-      initUrl();
-    }
-
     console.group("mounted 组件挂载完毕状态===============》");
 
-    // 获取萤石云AccessToken
-    getToken()
+    // 获取萤石云Url 和 AccessToken
+    Promise.all([getUrl({ cameraId: props.cameraId }), getToken()])
       .then((res) => {
-        console.log(2222222);
-        console.log(res.toString());
-        return res.toString();
+        return res;
       })
       .then((res) => {
         player = new EZUIKit.EZUIKitPlayer({
           id: "video-container", // 视频容器ID
-          accessToken: res.toString(),
-          url: playBaseConfig.url,
+          accessToken: res[1].toString(),
+          url: res[0],
           // simple: 极简版; pcLive: pc直播; pcRec: pc回放; mobileLive: 移动端直播; mobileRec: 移动端回放;security: 安防版; voice: 语音版;
           // template: "simple",
           plugin: ["talk"], // 加载插件，talk-对讲
           width: 600,
           height: 400,
         });
+      })
+      .then(() => {
+        isPlay.value = true;
+      })
+      .catch((e: Error) => {
+        createMessage.error("获取直播流出现异常!");
       });
   };
 
@@ -189,13 +175,28 @@
       console.log("promise 获取 数据", data);
     });
   };
+
+  const startRecord = () => {
+    isTranscribe.value = false;
+    let startSavePromise = player.startSave(`${new Date().getTime()}`);
+    startSavePromise.then((data: any) => {
+      console.log("promise 获取 数据", data);
+    });
+  };
+  const endRecord = () => {
+    isTranscribe.value = true;
+    let stopSavePromise = player.stopSave();
+    stopSavePromise.then((data: any) => {
+      console.log("promise 获取 数据", data);
+    });
+  };
 </script>
 
 <style lang="less" scoped>
   .video-bottoms {
     // display: inline-block;
     width: 100%;
-    // height: 32px;
+    height: 42px;
     text-align: left;
     z-index: 1000;
     // position: absolute;
@@ -203,11 +204,12 @@
     left: 0;
     color: #fff;
     background: rgba(0, 0, 0, 0.65);
-    padding: 10px 0;
+    padding: 5px 0;
     cursor: pointer;
 
     span {
-      display: inline-block;
+      //   display: flex;
+      //   align-items: center;
       margin-left: 20px;
       text-align: left;
       color: #fff;

@@ -48,5 +48,6 @@
     height: 100vh;
     position: fixed;
     top: 0;
+    z-index: 0;
   }
 </style>

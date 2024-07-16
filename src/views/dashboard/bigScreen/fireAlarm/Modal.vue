@@ -1,6 +1,9 @@
 <template>
-  <div class="modal">
-    <a-modal v-model:open="open" width="600px" destroyOnClose v-model:title="modalTitle" wrapClassName="ant-modal-content">
+  <div class="vModal" ref="vModal">
+    <a-modal :getContainer="() => $refs.vModal" :footer="null" v-model:open="open" width="620px" :mask="false" destroyOnClose>
+      <template #title>
+        <span style="line-height: 24px; font-size: 18px; color: #fff; margin: 15px">{{ modalTitle }}</span></template
+      >
       <Video :cameraId="cameraId" />
     </a-modal>
   </div>
@@ -22,12 +25,27 @@
 </script>
 
 <style lang="less" scoped>
-  :deep(.ant-modal-content) {
-    background: url(/@/assets/images/bigscreen/modal-bg.png) no-repeat;
-    background-size: 100% 100%;
-  }
-  .modal {
-    background: url(/@/assets/images/bigscreen/modal-bg.png) no-repeat;
-    background-size: 100% 100%;
+  .vModal {
+    :deep(.ant-modal-wrap) {
+      .ant-modal {
+        .ant-modal-content {
+          background: url("/@/assets/images/bigscreen/modal-bg.png");
+          background-size: 100% 100%;
+
+          #video-container-wrap {
+            padding-left: 10px;
+          }
+
+          .ant-modal-header {
+            background: url("/@/assets/images/bigscreen/modal-bg.png") no-repeat;
+            background-size: 1% 10%;
+          }
+
+          .ant-modal-close {
+            color: #fff;
+          }
+        }
+      }
+    }
   }
 </style>

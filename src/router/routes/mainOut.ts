@@ -21,7 +21,7 @@ export const mainOutRoutes: AppRouteModule[] = [
     path: "/bigScreen",
     name: "bigScreen",
     component: () => import("/@/views/dashboard/bigScreen/index.vue"),
-    redirect: "/bigScreen",
+    redirect: "/bigScreen/homePage",
     meta: {
       title: "大屏",
       ignoreAuth: true,

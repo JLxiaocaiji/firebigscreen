@@ -52,18 +52,7 @@
               </template>
 
               <template v-else-if="column.dataIndex == 'action'">
-                <a
-                  style="color: #fff"
-                  @click="
-                    () => {
-                      id = record.id;
-                      openDModal = true;
-                      console.log(openDModal);
-                    }
-                  "
-                >
-                  详情
-                </a>
+                <a style="color: #fff"> 详情 </a>
               </template>
             </template>
 
@@ -71,15 +60,20 @@
               <JEllipsis :value="text" :length="8" />
             </template>
 
-            <template #img="{ record }">
+            <template #img="{ text, column, record, index }">
               <img
                 style="width: 30px; height: 30px"
                 src="../../../../assets/images/bigscreen/camera.png"
                 @click="
                   () => {
+                    open = true;
+                    console.log(text);
+                    console.log(column);
+                    console.log(record);
+                    console.log(index);
+                    open = true;
                     cameraId = record.cameraId;
                     title = record.unitName;
-                    open = true;
                   }
                 "
               />
@@ -93,20 +87,19 @@
   </div>
 
   <Modal v-model:open="open" :title="title" :cameraId="cameraId" />
-  <DetailModal v-model:open="openDModal" :id="id" />
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, computed, onBeforeMount } from "vue";
+  import { reactive, ref, computed, watch, h, onBeforeMount } from "vue";
   import type { UnwrapRef } from "vue";
   import type { FormActionType } from "@/components/Form";
   import { SearchOutlined } from "@ant-design/icons-vue";
   import { isArray } from "@/utils/is";
+  import { BasicTable, TableAction, ActionItem } from "/@/components/Table";
   import JEllipsis from "/@/components/Form/src/jeecg/components/JEllipsis.vue";
   import { columns } from "./data";
   import { list, unitList } from "./api";
   import Modal from "./Modal.vue";
-  import DetailModal from "./DetailModal.vue";
 
   const state = reactive({
     collapsed: false,
@@ -140,6 +133,7 @@
     unitOptions.value = (await unitList()).map((item) => {
       return { label: item.unitName, value: item.id.toString() };
     });
+
     search();
   });
 
@@ -160,6 +154,12 @@
     }
   });
 
+  const provinceData = ["Zhejiang", "Jiangsu"];
+  const cityData = {
+    Zhejiang: ["Hangzhou", "Ningbo", "Wenzhou"],
+    Jiangsu: ["Nanjing", "Suzhou", "Zhenjiang"],
+  };
+
   const fireStateOptions = [
     { label: "已处理", value: 1 },
     { label: "未处理", value: 0 },
@@ -173,12 +173,16 @@
   const pagination = reactive({
     pageNo: 1,
     pageSize: 10,
-    pageSizeOptions: ["10", "20", "30", "100"],
+    pageSizeOptions: ["10", "20", "30", "100", "200"],
     total: 0,
   });
+  const checkedKeys = ref<Array<string | number>>([]);
+  const onSelectChange = (selectedRowKeys: (string | number)[]) => {
+    console.log("checkedKeys------>", checkedKeys);
+    checkedKeys.value = selectedRowKeys;
+  };
 
   const search = async () => {
-    loading.value = true;
     let obj = {
       startTime: startTime.value,
       endTime: endTime.value,
@@ -189,17 +193,20 @@
     };
     dataSource.value = (await list(obj))?.records;
     pagination.total = dataSource.value.length;
-    loading.value = false;
   };
+
+  // 选择列配置
+  //   const rowSelection = {
+  //     type: "checkbox",
+  //     columnWidth: 30,
+  //     selectedRowKeys: checkedKeys,
+  //     onChange: onSelectChange,
+  //   };
 
   // 视频列
   const open = ref<boolean>(false);
   const title = ref<string>("");
   const cameraId = ref<string>("");
-
-  // 详情列
-  const id = ref<string | number>("");
-  const openDModal = ref<boolean>(false);
 
   // 操作栏
 </script>
@@ -240,7 +247,7 @@
         background: url(/@/assets/images/bigscreen/menu-active.png) no-repeat;
         background-size: cover;
 
-        // text-align: center;
+        text-align: center;
         font-size: 18px;
         width: 90%;
         margin-left: 15px;
@@ -339,9 +346,5 @@
 
   :deep(.ant-table-pagination-right) {
     justify-content: center;
-  }
-
-  :deep(.ant-menu-title-content) {
-    text-align: center;
   }
 </style>

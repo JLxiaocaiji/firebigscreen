@@ -2,9 +2,6 @@
 <template>
   <div>
     <a-layout>
-      <!-- <a-layout-header class="h">
-        <Header />
-      </a-layout-header> -->
       <a-layout-content class="c">
         <ContentHeader class="c-home-content" @change-com="(i) => (cardIndex = i)" />
         <ConditionChoose @change="select" v-if="cardIndex == 0" />
@@ -88,10 +85,9 @@
 </template>
 
 <script lang="ts" setup>
-  import Header from "./header.vue";
-  import ContentHeader from "./ContentHeader.vue";
+  import ContentHeader from "./headerChoose/ContentHeader.vue";
 
-  import ConditionChoose from "./ConditionChoose.vue";
+  import ConditionChoose from "./headerChoose/ConditionChoose.vue";
 
   import { reactive, ref } from "vue";
 
@@ -338,7 +334,6 @@
     height: 84px;
     line-height: 84px;
     position: relative;
-    z-index: 999;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -352,6 +347,7 @@
 
   .c {
     height: calc(100% - 84px);
+    z-index: 1;
 
     &-home-content {
       display: flex;
@@ -411,7 +407,7 @@
     background: url("@/assets/images/cardBg.png") 0 0 / 100% 100% no-repeat;
     // cursor: pointer;
     border-radius: 4px;
-    z-index: 9;
+    // z-index: 9;
 
     .title {
       background: linear-gradient(0deg, rgba(122, 200, 255, 0.7), hsla(0, 0%, 100%, 0.7));
