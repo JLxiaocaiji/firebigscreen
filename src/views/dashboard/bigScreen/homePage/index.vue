@@ -12,16 +12,21 @@
 
         <div class="chart">
           <div class="chart-left">
-            <a-card :tab-list="tabList" :active-tab-key="key" @tab-change="(key) => onTabChange(key)">
+            <a-card
+              :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']"
+              :tab-list="tabList"
+              :active-tab-key="key"
+              @tab-change="(key) => onTabChange(key)"
+            >
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位消防安全评分</span></template>
               <template #extra> <a href="#">更多</a></template>
               <div v-if="key === 'tab1'">
-                <dv-scroll-board :config="config" style="width: 388px; height: 287px" />
+                <dv-scroll-board :config="config" style="width: 360px; height: 170px; margin: 10px -1px 0px 5px" />
               </div>
-              <div v-else><dv-scroll-board :config="config" style="width: 388px; height: 287px" /></div>
+              <div v-else><dv-scroll-board :config="config" style="width: 360px; height: 170px; margin: 10px -1px 0px 5px" /></div>
             </a-card>
 
-            <a-card>
+            <a-card :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备统计</span></template>
               <template #extra> <a href="#">更多</a></template>
               <div class="device-stat">
@@ -36,25 +41,59 @@
               </div>
             </a-card>
 
-            <a-card>
+            <a-card :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">近30天火警处置情况</span></template>
               <template #extra> <a href="#">更多</a></template>
               <PieChart :data="fireSum" />
             </a-card>
           </div>
 
+          <div
+            class="arrow-left"
+            @click="
+              () => {
+                isHideLeft = !isHideLeft;
+              }
+            "
+            :class="[isHideLeft ? 'active-left-button' : 'deActive-left-button']"
+          >
+            <img src="@/assets/images/bigscreen/button-1.png" />
+          </div>
+          <div
+            class="arrow-right"
+            @click="
+              () => {
+                isHideRight = !isHideRight;
+              }
+            "
+            :class="[isHideRight ? 'active-right-button' : 'deActive-right-button']"
+          >
+            <img src="@/assets/images/bigscreen/button-1.png" />
+          </div>
+          <div
+            class="arrow-bottom"
+            @click="
+              () => {
+                isHideBottom = !isHideBottom;
+              }
+            "
+            :class="[isHideBottom ? 'active-bottom-button' : 'deActive-bottom-button']"
+          >
+            <img src="@/assets/images/bigscreen/button-1.png" />
+          </div>
+
           <div class="chart-right">
-            <a-card>
+            <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">视频监控</span></template>
               <template #extra> <a href="#">更多</a></template>
             </a-card>
 
-            <a-card>
+            <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备监测情况趋势</span></template>
               <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
               <LineChart :data="lineData1" />
             </a-card>
-            <a-card>
+            <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">重要设备监测情况</span></template>
               <template #extra> <a href="#">更多</a></template>
               <RadarChart />
@@ -62,17 +101,17 @@
           </div>
         </div>
         <div class="chart-bottom">
-          <a-card>
+          <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
             <template #title><img src="@/assets/images/card-title.png" /><span class="title">火警趋势</span></template>
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <LineChart :data="lineData2" />
           </a-card>
-          <a-card>
+          <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
             <template #title><img src="@/assets/images/card-title.png" /><span class="title">火警来源分析</span></template>
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <PieChart :data="fireSource" />
           </a-card>
-          <a-card>
+          <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
             <template #title><img src="@/assets/images/card-title.png" /><span class="title">设备异常趋势</span></template>
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <LineChart :data="lineData3" />
@@ -86,19 +125,44 @@
 
 <script lang="ts" setup>
   import ContentHeader from "./headerChoose/ContentHeader.vue";
-
   import ConditionChoose from "./headerChoose/ConditionChoose.vue";
-
-  import { reactive, ref } from "vue";
-
+  import { onBeforeMount, reactive, ref } from "vue";
+  import { selectUnitList, fireAlarmSituation, fireAlarmTrends } from "./api";
   // 图表
   import WaterPolo from "./chart/WaterPolo.vue";
   import PieChart from "./chart/PieChart.vue";
   import LineChart from "./chart/LineChart.vue";
   import RadarChart from "./chart/RadarChart.vue";
-
   // 地图
   import Map from "./Map.vue";
+
+  onBeforeMount(async () => {
+    console.log(2222);
+    // 接入单位列表
+    // let res = await selectUnitList();
+    // console.log(res);
+
+    // 近30天火警处置情况
+    let temp = await fireAlarmSituation();
+    fireSum.data[0].value = temp.truePolice;
+    fireSum.data[1].value = temp.falsePolice;
+
+    // 火警趋势
+    let temp1 = await fireAlarmTrends();
+    lineData2.series[0].data = temp1.map((item) => {
+      return item.truePolice;
+    });
+    lineData2.series[1].data = temp1.map((item) => {
+      return item.falsePolice;
+    });
+    lineData2.xAxis.data = temp1.map((item) => {
+      return item.date;
+    });
+
+    console.log(temp);
+    console.log(temp1);
+    console.log(lineData2);
+  });
 
   const select = (i) => {
     console.log(i);
@@ -147,7 +211,7 @@
     // index: true,
     columnWidth: [50, 200],
     align: ["center"],
-    rowNum: 10,
+    rowNum: 7,
     waitTime: 1000,
     oddRowBGC: "#84b2d8",
     evenRowBGC: "#919EA8",
@@ -165,7 +229,7 @@
   const fireSum = reactive({
     data: [
       { value: 1, name: "真警", itemStyle: { color: "#1ddd96" } },
-      { value: 985, name: "虚警", itemStyle: { color: "#ffc452" } },
+      { value: 2, name: "虚警", itemStyle: { color: "#ffc452" } },
     ],
   });
 
@@ -179,16 +243,17 @@
   ];
   const lineData1 = reactive({
     legend: {
-      textStyle: {
-        color: "#fff",
-      },
+      //   textStyle: {
+      //     color: "#fff",
+      //   },
+      show: false,
     },
     xAxis: {
       data: ["2024-05-08", "2024-05-09", "2024-05-10", "2024-05-11", "2024-05-12", "2024-05-13", "2024-05-14"],
     },
     yAxis: {
-      min: 0,
-      max: 70000,
+      min: "dataMin",
+      max: "dataMax",
     },
     series: [
       {
@@ -324,27 +389,13 @@
       },
     ],
   });
+
+  const isHideLeft = ref<boolean>(false);
+  const isHideRight = ref<boolean>(false);
+  const isHideBottom = ref<boolean>(false);
 </script>
 
 <style lang="less" scoped>
-  .h {
-    background: url("@/assets/images/bsTitle.png") no-repeat;
-    background-size: 80%;
-    background-position: 50%;
-    height: 84px;
-    line-height: 84px;
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    color: #fff;
-    font-size: 22px;
-    padding: 0 20px;
-  }
-
   .c {
     height: calc(100% - 84px);
     z-index: 1;
@@ -393,21 +444,71 @@
   .chart {
     display: flex;
     justify-content: space-between;
+    margin-top: -45px;
+
+    .arrow-left {
+      background: url(@/assets/images/bigscreen/button.png) no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      width: 29px;
+      left: 370px;
+      top: 500px;
+      img {
+        display: block;
+        margin: 10px auto;
+        scale: 0.7;
+      }
+    }
+    .arrow-right {
+      background: url(@/assets/images/bigscreen/button.png) no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      width: 29px;
+      right: 375px;
+      top: 500px;
+      transform: rotate(180deg);
+      z-index: 1;
+      img {
+        display: block;
+        margin: 10px auto;
+        scale: 0.7;
+      }
+    }
+    .arrow-bottom {
+      background: url(@/assets/images/bigscreen/button.png) no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      width: 29px;
+      left: 50%;
+    //   bottom: 230px;
+      transform: rotate(-90deg);
+      z-index: 1;
+      img {
+        display: block;
+        margin: 10px auto;
+        scale: 0.7;
+      }
+    }
+
     &-bottom {
       display: flex;
       justify-content: center;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      margin: auto;
     }
   }
 
   .ant-card {
-    width: 400px;
-    height: 400px;
+    width: 380px;
+    height: 250px;
     padding: 4px;
     overflow: hidden;
     background: url("@/assets/images/cardBg.png") 0 0 / 100% 100% no-repeat;
     // cursor: pointer;
     border-radius: 4px;
-    // z-index: 9;
 
     .title {
       background: linear-gradient(0deg, rgba(122, 200, 255, 0.7), hsla(0, 0%, 100%, 0.7));
@@ -421,13 +522,22 @@
 
     :deep(&-head) {
       border-bottom: unset;
-      & > .ant-tabs > .ant-tabs-nav > .ant-tabs-nav-wrap {
-        width: 100%;
-        .ant-tabs-nav-list {
+      height: 50px;
+      & > .ant-tabs > .ant-tabs-nav {
+        margin-bottom: -10px;
+        height: 35px;
+        .ant-tabs-nav-wrap {
           width: 100%;
-          justify-content: space-around;
-          color: #fff;
+          .ant-tabs-nav-list {
+            width: 100%;
+            justify-content: space-around;
+            color: #fff;
+          }
         }
+      }
+
+      &-wrapper {
+        height: 25px;
       }
     }
 
@@ -450,8 +560,86 @@
 
     .device-stat {
       display: grid;
-      grid-template-columns: 200px 200px;
-      grid-template-rows: 160px 160px;
+      grid-template-columns: 190px 190px;
+      grid-template-rows: 90px 90px;
     }
+  }
+
+  // 左侧箭头
+  .active-left-button {
+    left: 0px !important;
+    transition: left 0.6s linear;
+    img {
+      transform: rotate(180deg);
+      transition: transform 0.6s linear;
+    }
+  }
+  .deActive-left-button {
+    left: 380px;
+    transition: left 0.6s linear;
+    img {
+      transform: rotate(180deg) 0.6s;
+      transition: transform 0.6s linear;
+    }
+  }
+  .active-left-column {
+    width: 0px;
+    transition: width 0.6s linear;
+  }
+  .deActive-left-column {
+    width: 380px;
+    transition: width 0.6s linear;
+  }
+
+  // 右侧箭头
+  .active-right-button {
+    right: 0px !important;
+    transition: right 0.6s linear;
+    img {
+      transform: rotate(180deg);
+      transition: transform 0.6s linear;
+    }
+  }
+  .deActive-right-button {
+    right: 380px;
+    transition: right 0.6s linear;
+    img {
+      transform: rotate(180deg) 0.6s;
+      transition: transform 0.6s linear;
+    }
+  }
+  .active-right-column {
+    width: 0px;
+    transition: width 0.6s linear;
+  }
+  .deActive-right-column {
+    width: 380px;
+    transition: width 0.6s linear;
+  }
+
+  // 下方箭头
+  .active-bottom-button {
+    bottom: 0;
+    transition: bottom 0.6s linear;
+    img {
+      transform: rotate(180deg);
+      transition: transform 0.6s linear;
+    }
+  }
+  .deActive-bottom-button {
+    bottom: 220px;
+    transition: bottom 0.6s linear;
+    img {
+      transform: rotate(180deg) 0.6s;
+      transition: transform 0.6s linear;
+    }
+  }
+  .active-bottom-column {
+    height: 0px;
+    transition: height 0.6s linear;
+  }
+  .deActive-bottom-column {
+    height: 230px;
+    transition: height 0.6s linear;
   }
 </style>

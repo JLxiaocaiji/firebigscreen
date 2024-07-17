@@ -27,6 +27,10 @@
           { name: "独立式火灾探测器", max: 300 },
           { name: "消防供水", max: 1000 },
         ],
+        // center: ["50%", "50%"],
+        // axisName: {
+        //   padding: [9, -2, -3, -4],
+        // },
       },
       series: [
         {
@@ -56,7 +60,7 @@
 
 <style lang="less" scoped>
   div {
-    width: 400px;
-    height: 300px;
+    width: 390px;
+    height: 120px;
   }
 </style>

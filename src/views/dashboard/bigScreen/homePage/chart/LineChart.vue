@@ -17,7 +17,7 @@
 
     chart.setOption({
       // 图例组件
-      legend: { ...props.data?.legend },
+      legend: { ...(props.data?.legend || {}) },
       // 提示框
       tooltip: {
         trigger: "axis",
@@ -51,7 +51,7 @@
 
 <style lang="less" scoped>
   div {
-    width: 400px;
-    height: 300px;
+    width: 380px;
+    height: 200px;
   }
 </style>

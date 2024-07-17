@@ -24,7 +24,7 @@
   };
 
   onMounted(() => {
-    init();
+    // init();
   });
 
   onUnmounted(() => {
@@ -38,7 +38,7 @@
       position: [...arr],
       icon: icon,
     });
-    map.value.add(marker);
+    map.value?.add(marker);
   };
 </script>
 

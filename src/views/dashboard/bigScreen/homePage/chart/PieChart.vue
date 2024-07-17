@@ -43,6 +43,6 @@
 <style lang="less" scoped>
   div {
     width: 350px;
-    height: 350px;
+    height: 180px;
   }
 </style>

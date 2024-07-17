@@ -108,11 +108,11 @@
     align-items: center;
     justify-content: center;
     .chart {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
     }
     span {
-      width: 50px;
+      width: 60px;
       text-align: center;
       color: #fff;
       margin: 0;
