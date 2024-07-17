@@ -24,7 +24,7 @@
   };
 
   onMounted(() => {
-    // init();
+    init();
   });
 
   onUnmounted(() => {

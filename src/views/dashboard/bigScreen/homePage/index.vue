@@ -48,40 +48,6 @@
             </a-card>
           </div>
 
-          <div
-            class="arrow-left"
-            @click="
-              () => {
-                isHideLeft = !isHideLeft;
-              }
-            "
-            :class="[isHideLeft ? 'active-left-button' : 'deActive-left-button']"
-          >
-            <img src="@/assets/images/bigscreen/button-1.png" />
-          </div>
-          <div
-            class="arrow-right"
-            @click="
-              () => {
-                isHideRight = !isHideRight;
-              }
-            "
-            :class="[isHideRight ? 'active-right-button' : 'deActive-right-button']"
-          >
-            <img src="@/assets/images/bigscreen/button-1.png" />
-          </div>
-          <div
-            class="arrow-bottom"
-            @click="
-              () => {
-                isHideBottom = !isHideBottom;
-              }
-            "
-            :class="[isHideBottom ? 'active-bottom-button' : 'deActive-bottom-button']"
-          >
-            <img src="@/assets/images/bigscreen/button-1.png" />
-          </div>
-
           <div class="chart-right">
             <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">视频监控</span></template>
@@ -116,6 +82,42 @@
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <LineChart :data="lineData3" />
           </a-card>
+        </div>
+
+        <div class="icon">
+          <div
+            class="arrow-left"
+            @click="
+              () => {
+                isHideLeft = !isHideLeft;
+              }
+            "
+            :class="[isHideLeft ? 'active-left-button' : 'deActive-left-button']"
+          >
+            <img src="@/assets/images/bigscreen/button-1.png" />
+          </div>
+          <div
+            class="arrow-right"
+            @click="
+              () => {
+                isHideRight = !isHideRight;
+              }
+            "
+            :class="[isHideRight ? 'active-right-button' : 'deActive-right-button']"
+          >
+            <img src="@/assets/images/bigscreen/button-1.png" />
+          </div>
+          <div
+            class="arrow-bottom"
+            @click="
+              () => {
+                isHideBottom = !isHideBottom;
+              }
+            "
+            :class="[isHideBottom ? 'active-bottom-button' : 'deActive-bottom-button']"
+          >
+            <img src="@/assets/images/bigscreen/button-1.png" />
+          </div>
         </div>
       </a-layout-content>
     </a-layout>
@@ -446,50 +448,6 @@
     justify-content: space-between;
     margin-top: -45px;
 
-    .arrow-left {
-      background: url(@/assets/images/bigscreen/button.png) no-repeat;
-      background-size: 100% 100%;
-      position: absolute;
-      width: 29px;
-      left: 370px;
-      top: 500px;
-      img {
-        display: block;
-        margin: 10px auto;
-        scale: 0.7;
-      }
-    }
-    .arrow-right {
-      background: url(@/assets/images/bigscreen/button.png) no-repeat;
-      background-size: 100% 100%;
-      position: absolute;
-      width: 29px;
-      right: 375px;
-      top: 500px;
-      transform: rotate(180deg);
-      z-index: 1;
-      img {
-        display: block;
-        margin: 10px auto;
-        scale: 0.7;
-      }
-    }
-    .arrow-bottom {
-      background: url(@/assets/images/bigscreen/button.png) no-repeat;
-      background-size: 100% 100%;
-      position: absolute;
-      width: 29px;
-      left: 50%;
-    //   bottom: 230px;
-      transform: rotate(-90deg);
-      z-index: 1;
-      img {
-        display: block;
-        margin: 10px auto;
-        scale: 0.7;
-      }
-    }
-
     &-bottom {
       display: flex;
       justify-content: center;
@@ -562,6 +520,42 @@
       display: grid;
       grid-template-columns: 190px 190px;
       grid-template-rows: 90px 90px;
+    }
+  }
+
+  .pic {
+    width: 29px;
+    position: absolute;
+  }
+  .icon {
+    img {
+      display: block;
+      margin: 10px auto;
+      scale: 0.7;
+    }
+    .arrow-left {
+      background: url(@/assets/images/bigscreen/button.png) no-repeat;
+      background-size: 100% 100%;
+      left: 370px;
+      top: 500px;
+      &:extend(.pic);
+    }
+    .arrow-right {
+      background: url(@/assets/images/bigscreen/button.png) no-repeat;
+      background-size: 100% 100%;
+      right: 373px;
+      top: 500px;
+      transform: rotate(180deg);
+      z-index: 1;
+      &:extend(.pic);
+    }
+    .arrow-bottom {
+      background: url(@/assets/images/bigscreen/button.png) no-repeat;
+      background-size: 100% 100%;
+      left: 50%;
+      //   bottom: 230px;
+      transform: rotate(-90deg);
+      &:extend(.pic);
     }
   }
 
