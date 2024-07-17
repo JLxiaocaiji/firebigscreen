@@ -536,14 +536,14 @@
     .arrow-left {
       background: url(@/assets/images/bigscreen/button.png) no-repeat;
       background-size: 100% 100%;
-      left: 370px;
+      left: 378px;
       top: 500px;
       &:extend(.pic);
     }
     .arrow-right {
       background: url(@/assets/images/bigscreen/button.png) no-repeat;
       background-size: 100% 100%;
-      right: 373px;
+      right: 378px;
       top: 500px;
       transform: rotate(180deg);
       z-index: 1;
