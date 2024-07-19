@@ -11,7 +11,7 @@ enum Api {
  * @param params
  * @returns
  */
-export const selectUnitList = () => defHttp.post({ url: Api.selectUnitList }, { joinTime: false });
+export const selectUnitList = () => defHttp.post({ url: Api.selectUnitList }, { joinTime: false, isTransformResponse: false });
 
 /**
  * 大屏近30天火警处置情况

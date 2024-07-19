@@ -135,36 +135,9 @@
   import PieChart from "./chart/PieChart.vue";
   import LineChart from "./chart/LineChart.vue";
   import RadarChart from "./chart/RadarChart.vue";
+  import type { EChartsOption } from "echarts";
   // 地图
   import Map from "./Map.vue";
-
-  onBeforeMount(async () => {
-    console.log(2222);
-    // 接入单位列表
-    // let res = await selectUnitList();
-    // console.log(res);
-
-    // 近30天火警处置情况
-    let temp = await fireAlarmSituation();
-    fireSum.data[0].value = temp.truePolice;
-    fireSum.data[1].value = temp.falsePolice;
-
-    // 火警趋势
-    let temp1 = await fireAlarmTrends();
-    lineData2.series[0].data = temp1.map((item) => {
-      return item.truePolice;
-    });
-    lineData2.series[1].data = temp1.map((item) => {
-      return item.falsePolice;
-    });
-    lineData2.xAxis.data = temp1.map((item) => {
-      return item.date;
-    });
-
-    console.log(temp);
-    console.log(temp1);
-    console.log(lineData2);
-  });
 
   const select = (i) => {
     console.log(i);
@@ -243,7 +216,7 @@
     { label: "地点3", value: 3 },
     { label: "地点4", value: 4 },
   ];
-  const lineData1 = reactive({
+  const lineData1: EChartsOption = reactive({
     legend: {
       //   textStyle: {
       //     color: "#fff",
@@ -333,7 +306,7 @@
   });
 
   // 火警来源分析
-  const fireSource = reactive({
+  const fireSource: EChartsOption = reactive({
     data: [
       { value: 1, name: "消防设备预警", itemStyle: { color: "#fd6585" } },
       { value: 0, name: "监控智能预警", itemStyle: { color: "#51b7ff" } },
@@ -341,7 +314,7 @@
   });
 
   // 设备异常趋势
-  const lineData3 = reactive({
+  const lineData3: EChartsOption = reactive({
     legend: {
       data: ["设备异常", "视频异常", "预警逾期"],
       right: "10%",
@@ -395,6 +368,31 @@
   const isHideLeft = ref<boolean>(false);
   const isHideRight = ref<boolean>(false);
   const isHideBottom = ref<boolean>(false);
+
+  onBeforeMount(async () => {
+    console.log(2222);
+
+    // 近30天火警处置情况
+    let temp = await fireAlarmSituation();
+    fireSum.data[0].value = temp.truePolice;
+    fireSum.data[1].value = temp.falsePolice;
+
+    // 火警趋势
+    let temp1 = await fireAlarmTrends();
+    lineData2.series[0].data = temp1.map((item) => {
+      return item.truePolice;
+    });
+    lineData2.series[1].data = temp1.map((item) => {
+      return item.falsePolice;
+    });
+    lineData2.xAxis.data = temp1.map((item) => {
+      return item.date;
+    });
+
+    console.log(temp);
+    console.log(temp1);
+    console.log(lineData2);
+  });
 </script>
 
 <style lang="less" scoped>
@@ -444,15 +442,24 @@
   }
 
   .chart {
-    display: flex;
-    justify-content: space-between;
-    margin-top: -45px;
+    &-left {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+    &-right {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
 
     &-bottom {
       display: flex;
       justify-content: center;
       position: absolute;
       bottom: 0px;
+      padding-right: 2px;
       left: 0px;
       right: 0px;
       margin: auto;
@@ -543,7 +550,7 @@
     .arrow-right {
       background: url(@/assets/images/bigscreen/button.png) no-repeat;
       background-size: 100% 100%;
-      right: 378px;
+      right: 382px;
       top: 500px;
       transform: rotate(180deg);
       z-index: 1;
@@ -553,7 +560,7 @@
       background: url(@/assets/images/bigscreen/button.png) no-repeat;
       background-size: 100% 100%;
       left: 50%;
-      //   bottom: 230px;
+      bottom: 240px;
       transform: rotate(-90deg);
       &:extend(.pic);
     }
@@ -613,7 +620,7 @@
 
   // 下方箭头
   .active-bottom-button {
-    bottom: 0;
+    bottom: 0 !important;
     transition: bottom 0.6s linear;
     img {
       transform: rotate(180deg);
@@ -633,7 +640,7 @@
     transition: height 0.6s linear;
   }
   .deActive-bottom-column {
-    height: 230px;
+    height: 250px;
     transition: height 0.6s linear;
   }
 </style>

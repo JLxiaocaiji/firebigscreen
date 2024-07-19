@@ -3,19 +3,23 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from "vue";
+  import { onMounted, ref, watch, nextTick } from "vue";
   import * as echarts from "echarts";
 
-  const line = ref<HTMLDivElement>();
+  const line = ref<HTMLDivElement | null>(null);
 
   const props = defineProps({
     data: { type: Object, default: () => {} },
   });
 
-  const initChart = () => {
-    let chart = echarts.init(line.value);
+  const chart = ref();
 
-    chart.setOption({
+  onMounted(() => {
+    chart.value = echarts.init(line.value);
+  });
+
+  const initChart = () => {
+    chart.value.setOption({
       // 图例组件
       legend: { ...(props.data?.legend || {}) },
       // 提示框
@@ -44,9 +48,16 @@
     });
   };
 
-  onMounted(() => {
-    initChart();
-  });
+  watch(
+    () => props.data,
+    () => {
+      props.data &&
+        nextTick(() => {
+          initChart();
+        });
+    },
+    { deep: true }
+  );
 </script>
 
 <style lang="less" scoped>

@@ -18,8 +18,8 @@
 
 <script lang="ts" setup>
   import ContentHeaderCard from "./ContentHeaderCard.vue";
-
-  import { reactive, ref } from "vue";
+  import { selectUnitList } from "../api";
+  import { onBeforeMount, reactive, ref } from "vue";
 
   const list = reactive([
     {
@@ -61,6 +61,25 @@
   defineEmits(["change-com"]);
 
   const checked = ref<number>(0);
+
+  onBeforeMount(async () => {
+    // 接入单位列表
+    let res = (await selectUnitList()).data;
+    console.log(res);
+    // 单位数
+    list[0].num = res.unitNum;
+    // 离线单位
+    list[0].detail[1].num = res.outLineUnit;
+    // 在线单位
+    list[0].detail[0].num = Number(res.unitNum) - Number(res.outLineUnit);
+
+    list[1].num = res.deviceNum;
+    list[1].detail = res.deviceTypeCountList.map((item) => {
+      return { describe: item.deviceTypeName, num: item.deviceTypeNum };
+    });
+
+    list[2].num = res.cameraNum;
+  });
 </script>
 
 <style lang="less" scoped>

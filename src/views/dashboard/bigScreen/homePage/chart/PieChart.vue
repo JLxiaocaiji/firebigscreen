@@ -3,19 +3,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from "vue";
+  import { onMounted, ref, watchEffect, watch, nextTick } from "vue";
   import * as echarts from "echarts";
 
   const pie = ref<HTMLDivElement>();
+
+  const chart = ref();
 
   const props = defineProps({
     data: { type: Object, default: () => {} },
   });
 
   const initChart = () => {
-    let chart = echarts.init(pie.value);
-
-    chart.setOption({
+    chart.value.setOption({
       legend: {
         orient: "vertical",
         right: "right",
@@ -36,8 +36,19 @@
   };
 
   onMounted(() => {
-    initChart();
+    chart.value = echarts.init(pie.value);
   });
+
+  watch(
+    () => props.data,
+    () => {
+      props.data &&
+        nextTick(() => {
+          initChart();
+        });
+    },
+    { deep: true }
+  );
 </script>
 
 <style lang="less" scoped>
