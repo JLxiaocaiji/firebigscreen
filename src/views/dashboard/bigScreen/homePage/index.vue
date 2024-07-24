@@ -3,8 +3,9 @@
   <div>
     <a-layout>
       <a-layout-content class="c">
-        <ContentHeader class="c-home-content" @change-com="(i) => (cardIndex = i)" />
-        <ConditionChoose @change="select" v-if="cardIndex == 0" />
+        <ContentHeader class="c-home-content" @change-com="(i) => (cardIndex = i)" :list="list" />
+
+        <ConditionChoose @change="search" v-if="cardIndex == 0" />
         <div class="device-map" v-if="cardIndex == 1">
           <span @click="isActive = true" :class="{ 'device-map-active': isActive }">隐患地图</span>
           <span @click="isActive = false" :class="{ 'device-map-active': !isActive }">隐患热力图</span>
@@ -12,7 +13,7 @@
 
         <div class="chart">
           <div class="chart-left">
-            <a-card
+            <!-- <a-card
               :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']"
               :tab-list="tabList"
               :active-tab-key="key"
@@ -24,7 +25,7 @@
                 <dv-scroll-board :config="config" style="width: 360px; height: 170px; margin: 10px -1px 0px 5px" />
               </div>
               <div v-else><dv-scroll-board :config="config" style="width: 360px; height: 170px; margin: 10px -1px 0px 5px" /></div>
-            </a-card>
+            </a-card> -->
 
             <a-card :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备统计</span></template>
@@ -41,11 +42,11 @@
               </div>
             </a-card>
 
-            <a-card :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']">
+            <!-- <a-card :class="[isHideLeft ? 'active-left-column' : 'deActive-left-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">近30天火警处置情况</span></template>
               <template #extra> <a href="#">更多</a></template>
               <PieChart :data="fireSum" />
-            </a-card>
+            </a-card> -->
           </div>
 
           <div class="chart-right">
@@ -54,34 +55,39 @@
               <template #extra> <a href="#">更多</a></template>
             </a-card>
 
-            <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
+            <!-- <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">单位设备监测情况趋势</span></template>
               <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
               <LineChart :data="lineData1" />
-            </a-card>
-            <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
+            </a-card> -->
+            <!-- <a-card :class="[isHideRight ? 'active-right-column' : 'deActive-right-column']">
               <template #title><img src="@/assets/images/card-title.png" /><span class="title">重要设备监测情况</span></template>
               <template #extra> <a href="#">更多</a></template>
               <RadarChart />
-            </a-card>
+            </a-card> -->
           </div>
         </div>
         <div class="chart-bottom">
+          <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
+            <template #title><img src="@/assets/images/card-title.png" /><span class="title">近30天火警处置情况</span></template>
+            <template #extra> <a href="#">更多</a></template>
+            <PieChart :data="fireSum" />
+          </a-card>
           <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
             <template #title><img src="@/assets/images/card-title.png" /><span class="title">火警趋势</span></template>
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <LineChart :data="lineData2" />
           </a-card>
-          <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
+          <!-- <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
             <template #title><img src="@/assets/images/card-title.png" /><span class="title">火警来源分析</span></template>
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <PieChart :data="fireSource" />
-          </a-card>
-          <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
+          </a-card> -->
+          <!-- <a-card :class="[isHideBottom ? 'active-bottom-column' : 'deActive-bottom-column']">
             <template #title><img src="@/assets/images/card-title.png" /><span class="title">设备异常趋势</span></template>
             <template #extra> <a-select :options="options" v-model:value="address" placeholder="请选择单位" /></template>
             <LineChart :data="lineData3" />
-          </a-card>
+          </a-card> -->
         </div>
 
         <div class="icon">
@@ -138,9 +144,29 @@
   import type { EChartsOption } from "echarts";
   // 地图
   import Map from "./Map.vue";
+  import { list } from "./index";
 
-  const select = (i) => {
-    console.log(i);
+  // 第三行 搜索 按钮
+  const search = async (formData) => {
+    console.log(formData);
+    console.log(1111);
+
+    if (formData) {
+      let res = (await selectUnitList(formData)).data;
+      // 单位数
+      list[0].num = res.unitNum;
+      // 离线单位
+      list[0].detail[1].num = res.outLineUnit;
+      // 在线单位
+      list[0].detail[0].num = Number(res.unitNum) - Number(res.outLineUnit);
+
+      list[1].num = res.deviceNum;
+      list[1].detail = res.deviceTypeCountList.map((item) => {
+        return { describe: item.deviceTypeName, num: item.deviceTypeNum };
+      });
+
+      list[2].num = res.cameraNum;
+    }
   };
 
   const tabList = [
@@ -370,8 +396,6 @@
   const isHideBottom = ref<boolean>(false);
 
   onBeforeMount(async () => {
-    console.log(2222);
-
     // 近30天火警处置情况
     let temp = await fireAlarmSituation();
     fireSum.data[0].value = temp.truePolice;
@@ -445,13 +469,15 @@
     &-left {
       position: absolute;
       left: 0;
-      bottom: 0;
+      //   bottom: 0;
+      top: 40%;
     }
 
     &-right {
       position: absolute;
       right: 0;
-      bottom: 0;
+      //   bottom: 0;
+      top: 40%;
     }
 
     &-bottom {

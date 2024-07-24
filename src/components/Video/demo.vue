@@ -107,27 +107,9 @@
     cameraId: { type: String, required: true },
   });
 
-  const getUrl = async () => {
-    let res = await getUrl({ cameraId: props.cameraId });
-    console.log(1111);
-    console.log(res);
-  };
-
-  const getToken = async () => {
-    let res = await getToken();
-    console.log(22222);
-    console.log(res);
-    return res;
-  };
-
   const init = () => {
     if (player) {
       destroy();
-    }
-
-    if (props.cameraId) {
-      getUrl();
-      getToken();
     }
 
     console.group("mounted 组件挂载完毕状态===============》");

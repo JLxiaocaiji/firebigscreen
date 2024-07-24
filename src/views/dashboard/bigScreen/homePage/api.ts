@@ -4,14 +4,15 @@ enum Api {
   selectUnitList = "/companyPosition/selectUnitList",
   fireAlarmSituation = "/fireRecords/fireAlarmSituation",
   fireAlarmTrends = "/fireRecords/fireAlarmTrends",
+  indexSelectTypeFront = "/companyPosition/indexSelectTypeFront",
 }
 
 /**
- * 大屏火警事件列表
+ * 区域单位筛选
  * @param params
  * @returns
  */
-export const selectUnitList = () => defHttp.post({ url: Api.selectUnitList }, { joinTime: false, isTransformResponse: false });
+export const selectUnitList = (params) => defHttp.post({ url: Api.selectUnitList, params: params }, { joinTime: false, isTransformResponse: false });
 
 /**
  * 大屏近30天火警处置情况
@@ -25,3 +26,10 @@ export const fireAlarmSituation = () => defHttp.get({ url: Api.fireAlarmSituatio
  * @returns
  */
 export const fireAlarmTrends = () => defHttp.get({ url: Api.fireAlarmTrends });
+
+/**
+ * 区域单位筛选下拉
+ * @param params
+ * @returns
+ */
+export const indexSelectTypeFront = () => defHttp.post({ url: Api.indexSelectTypeFront }, { isTransformResponse: false });

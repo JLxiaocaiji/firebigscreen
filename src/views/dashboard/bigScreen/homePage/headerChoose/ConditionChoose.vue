@@ -1,59 +1,68 @@
 <template>
   <a-form layout="inline" ref="formRef" :model="form" class="h-form" :wrapperCol="{ style: { width: '150px' } }">
-    <a-form-item name="region">
-      <a-select v-model:value="form.region" :options="options1" @change="search" />
+    <a-form-item name="administrationRegion">
+      <a-select v-model:value="form.administrationRegion" :options="options1" />
     </a-form-item>
-    <a-form-item name="superior">
-      <a-select v-model:value="form.superior" :options="options2" @change="search" />
+    <a-form-item name="upUnitId">
+      <a-select v-model:value="form.upUnitId" :options="options2" placeholder="请选择上级单位" />
     </a-form-item>
-    <a-form-item name="unitType">
-      <a-select v-model:value="form.unitType" :options="options3" @change="search" />
+    <a-form-item name="unitId">
+      <a-select v-model:value="form.unitId" :options="options3" placeholder="请选择单位" />
     </a-form-item>
-    <a-form-item name="unit">
-      <a-select v-model:value="form.unit" :options="options4" @change="search" />
+    <a-form-item>
+      <a-button type="primary" @click="search">搜索</a-button>
     </a-form-item>
   </a-form>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from "vue";
+  import { onBeforeMount, reactive, ref } from "vue";
   import type { SelectProps } from "ant-design-vue";
-
-  import { FormState } from "./index.d";
+  import { indexSelectTypeFront } from "../api";
+  import { FormState } from "../index.d";
+  import REGION_DATA from "china-area-data";
+  import { isString } from "@/utils/is";
 
   const formRef = ref();
 
   const form = reactive<FormState>({
-    region: 0,
-    superior: 0,
-    unitType: 1,
-    unit: 2,
+    administrationRegion: "",
+    upUnitId: "",
+    unitId: "",
   });
 
-  const options1 = ref<SelectProps["options"]>([
-    { label: "全部", value: 0 },
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-  ]);
-  const options2 = ref<SelectProps["options"]>([
-    { label: "全部", value: 0 },
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-  ]);
-  const options3 = ref<SelectProps["options"]>([
-    { label: "全部", value: 0 },
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-  ]);
-  const options4 = ref<SelectProps["options"]>([
-    { label: "全部", value: 0 },
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-  ]);
+  const options1 = ref<SelectProps["options"]>([]);
+  const options2 = ref<SelectProps["options"]>([]);
+  const options3 = ref<SelectProps["options"]>([]);
 
-  const search = (i) => {
-    console.log(i);
+  onBeforeMount(async () => {
+    let temp = (await indexSelectTypeFront()).data;
+
+    options1.value = temp.administrationRegionList.reduce((acc, cur) => {
+      if (isString(cur.administrationRegion) && cur.administrationRegion != "") {
+        let temp1 = cur.administrationRegion.split(",")[1];
+        let temp2 = cur.administrationRegion.split(",")[2];
+        console.log(temp1);
+        console.log(temp2);
+        acc.push({ label: REGION_DATA[temp1 + "00"][temp2], value: cur.administrationRegion });
+      }
+      return acc;
+    }, []);
+
+    options2.value = temp.upUnit.map((item) => {
+      return { label: item.unitName, value: item.id };
+    });
+
+    options3.value = temp.units.map((item) => {
+      return { label: item.unitName, value: item.id };
+    });
+  });
+
+  const emits = defineEmits(["change"]);
+  const search = () => {
     console.log(form);
+
+    emits("change", form);
   };
 </script>
 
@@ -68,5 +77,40 @@
     width: 145px;
     height: 34px;
     color: #4fb9f3;
+  }
+
+  .form-item-style {
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    color: #fff;
+    background: #fff;
+    // background: rgb(10, 50, 112);
+  }
+
+  :deep(.ant-picker):extend(.form-item-style) {
+    .ant-picker-input {
+      input {
+        color: #fff;
+        &::placeholder {
+          color: #fff;
+        }
+      }
+    }
+    .ant-picker-separator {
+      color: #fff;
+    }
+    .ant-picker-suffix {
+      color: #fff;
+    }
+  }
+  :deep(.ant-select-selector):extend(.form-item-style) {
+    .ant-select-selection-item,
+    .ant-select-selection-placeholder {
+      color: #fff !important;
+    }
+  }
+  :deep(.ant-select-arrow) {
+    color: #fff !important;
   }
 </style>

@@ -7,18 +7,14 @@
     <ButtonItem :itemList="list2" />
   </div>
   <div class="h-avatar">
-    <a-avatar>
-      <template #icon>
-        <UserOutlined />
-      </template>
-    </a-avatar>
+    <UserDropDown />
   </div>
 </template>
 
 <script lang="ts" setup name="Header">
-  import { UserOutlined } from "@ant-design/icons-vue";
   import ButtonItem from "./buttonItem.vue";
   import { list1, list2 } from "./index";
+  import { UserDropDown } from "@/layouts/default/header/components";
 </script>
 
 <style lang="less" scoped>
@@ -27,11 +23,12 @@
   }
 
   .h-right {
-    margin-right: 45px;
+    margin-right: 70px;
   }
 
   .h-avatar {
     position: absolute;
-    right: 25px;
+    right: 0px;
+    top: 20px;
   }
 </style>
