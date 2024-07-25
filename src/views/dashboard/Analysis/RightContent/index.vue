@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <a-card class="video-card">
-    <div style="width: 100%; height: 300px"><Camera /></div>
+    <!-- <div style="width: 100%; height: 300px"><Camera /></div> -->
     <a-form ref="formRef" name="form" :model="form" colon:false :label-col="{ span: 7 }" :wrapper-col="{ span: 16 }">
       <a-form-item name="monitor" label="监控列表" :rules="[{ required: true }]">
         <a-select
@@ -56,7 +56,6 @@
   import { reactive, watch, ref } from "vue";
   import { pollingResult } from "./index";
   import { deviceMSgList } from "./index";
-  import Camera from "../Camera/index";
 
   /*
     视频信息

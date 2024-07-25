@@ -66,14 +66,9 @@
                 src="../../../../assets/images/bigscreen/camera.png"
                 @click="
                   () => {
-                    open = true;
-                    console.log(text);
-                    console.log(column);
-                    console.log(record);
-                    console.log(index);
-                    open = true;
                     cameraId = record.cameraId;
                     title = record.unitName;
+                    open = true;
                   }
                 "
               />
@@ -85,8 +80,6 @@
       </a-col>
     </a-row>
   </div>
-
-  <Modal v-model:open="open" :title="title" :cameraId="cameraId" />
 </template>
 
 <script lang="ts" setup>
@@ -99,7 +92,6 @@
   import JEllipsis from "/@/components/Form/src/jeecg/components/JEllipsis.vue";
   import { columns } from "./data";
   import { list, unitList } from "./api";
-  import Modal from "./Modal.vue";
 
   const state = reactive({
     collapsed: false,

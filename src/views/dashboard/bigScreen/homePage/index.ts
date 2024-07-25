@@ -20,7 +20,7 @@ export const list2 = reactive<HeaderItem[]>([
 
 export const list: headerDataType[] = reactive([
   {
-    img: "/src/assets/images/unit.png",
+    img: "/images/unit.png",
     describe: "接入单位",
     num: 219,
     detail: [
@@ -29,7 +29,7 @@ export const list: headerDataType[] = reactive([
     ],
   },
   {
-    img: "/src/assets/images/device.png",
+    img: "/images/device.png",
     describe: "接入设备数",
     num: 61341,
     detail: [
@@ -39,17 +39,17 @@ export const list: headerDataType[] = reactive([
     ],
   },
   {
-    img: "/src/assets/images/video.png",
+    img: "/images/video.png",
     describe: "接入视频数",
     num: 373,
   },
   {
-    img: "/src/assets/images/xiaofangshuan.png",
+    img: "/images/xiaofangshuan.png",
     describe: "消防水系统",
     num: 822,
   },
   {
-    img: "/src/assets/images/huojing.png",
+    img: "/images/huojing.png",
     describe: "实时火警",
     num: 0,
   },
