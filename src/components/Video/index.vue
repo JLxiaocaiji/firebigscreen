@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts" setup name="Video">
-  import { ref, onMounted, reactive } from "vue";
+  import { ref, onMounted, reactive, onBeforeUnmount } from "vue";
   import { getUrl, getToken } from "./api";
   import { IPlayer } from "./index";
   import EZUIKit from "ezuikit-js";
@@ -126,6 +126,12 @@
   onMounted(() => {
     (window as any).player = player;
     init();
+  });
+
+  onBeforeUnmount(() => {
+    if (player) {
+      destroy();
+    }
   });
 
   const destroy = () => {
